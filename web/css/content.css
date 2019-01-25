@@ -1,0 +1,33 @@
+body{
+    font-family: "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
+    font-size: 13px;
+
+
+}
+.nav{
+    font-family: "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
+    margin:0 0 15px 0px;
+    color: #313031;
+    font-size: 13px;
+    padding-bottom: 10px;
+
+}
+.form{
+    border:  #EDE8DA solid 1px;
+    margin-top: 10px;
+}
+.form tr td{
+    padding: 7px;
+    font-weight: bold
+}
+.loading{
+    position: absolute;
+    top: 0px;
+    margin-left: 45%;
+    font-size: 13PX;
+    font-weight: bold;
+    background-color: #FFF1A8;
+    padding: 5px 10px 5px 10px;
+}
+fieldset {   border: 1px #cccccc solid;}
+fieldset input[type=button]{width: 100%;height: 30px;margin-bottom: 5px;}
