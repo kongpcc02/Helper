@@ -43,14 +43,14 @@ public class P114Controller extends HttpServlet {
             P114Service s = new P114Service();
             if (line.equals("9")) {
                 out.println("<br>==============REV file===============<br>");
-                out.println(s.convertData("TL_09_ETC_OPN_REV_" + yy + mm + dd + ".gw", line, dd + mm + yy));
+                out.println(s.convertData("TL_09_ETC_OPN_REV_TOLL_" + yy + mm + dd + ".gw", line, dd + mm + yy));
                 out.println("<br>==============TRF file===============<br>");
-                out.println(s.convertData("TL_09_ETC_OPN_TRF_" + yy + mm + dd + ".gw", line, dd + mm + yy));
+                out.println(s.convertData("TL_09_ETC_OPN_TRF_TOLL_" + yy + mm + dd + ".gw", line, dd + mm + yy));
             } else {
                 out.println("<br>==============REV file===============<br>");
-                out.println(s.convertData("TL_07_ETC_CLS_REV_" + yy + mm + dd + ".gw", line, dd + mm + yy));
+                out.println(s.convertData("TL_07_ETC_CLS_REV_TOLL_" + yy + mm + dd + ".gw", line, dd + mm + yy));
                 out.println("<br>==============TRF file===============<br>");
-                out.println(s.convertData("TL_07_ETC_CLS_TRF_" + yy + mm + dd + ".gw", line, dd + mm + yy));
+                out.println(s.convertData("TL_07_ETC_CLS_TRF_TOLL_" + yy + mm + dd + ".gw", line, dd + mm + yy));
             }
         } catch (Exception e) {
             System.out.println("=============" + e);

@@ -42,9 +42,9 @@ public class P114Service extends Helper {
                 while ((sCurrentLine = br.readLine()) != null) {
                     String[] str = sCurrentLine.split("\t");
                     if (line.equals("9")) {
-                        c.addBatch("INSERT INTO P114_TMP VALUES('" + str[0] + "','" + str[1] + "','" + str[3] + "','" + str[4] + "','" + str[5] + "','" + str[6] + "','" + str[7] + "','" + str[8] + "','" + str[9] + "','" + str[10] + "','" + str[11] + "',NULL,'" + str[2] + "')");
+                        c.addBatch("INSERT INTO P114_TMP  VALUES('" + str[0] + "','" + str[1] + "','" + str[4] + "','" + str[5] + "','" + str[6] + "','" + str[7] + "','" + str[8] + "','" + str[9] + "','" + str[10] + "','" + str[11] + "','" + str[12] + "',NULL,'" + str[3] + "','" + str[2] + "')");
                     } else {
-                        c.addBatch("INSERT INTO P114_TMP VALUES('" + str[0] + "','" + str[2] + "','" + str[4] + "','" + str[5] + "','" + str[6] + "','" + str[7] + "','" + str[8] + "','" + str[9] + "','" + str[10] + "','" + str[11] + "','" + str[12] + "','" + str[1] + "','" + str[3] + "')");
+                        c.addBatch("INSERT INTO P114_TMP VALUES('" + str[0] + "','" + str[2] + "','" + str[5] + "','" + str[6] + "','" + str[7] + "','" + str[8] + "','" + str[9] + "','" + str[10] + "','" + str[11] + "','" + str[12] + "','" + str[13] + "','" + str[1] + "','" + str[4] + "','" + str[3] + "')");
                     }
                 }
                 c.executeBatch();
@@ -58,16 +58,18 @@ public class P114Service extends Helper {
                 bw = new BufferedWriter(fw);
 
                 if (line.equals("9")) {
-                    c.executeQuery("SELECT STT_CODE_EXT,'" + dt + "',EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER,1,0,SUM(PASS1),0,0 FROM P114_TMP "
-                            + "WHERE SUBSTR (STT_CODE_EXT, 0, 1) = '" + line + "'  GROUP BY STT_CODE_EXT,EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER ORDER BY STT_CODE_EXT");
+                    c.executeQuery("SELECT STT_CODE_EXT,'" + dt + "',TOLL_DT,EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER,1,0,SUM(PASS1),0,0 FROM P114_TMP "
+                            + "WHERE SUBSTR (STT_CODE_EXT, 0, 1) = '" + line + "' "
+                            + " GROUP BY STT_CODE_EXT,TOLL_DT,EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER ORDER BY STT_CODE_EXT");
                     while (c.getResult().next()) {
-                        bw.write(c.getResult().getString(1) + "\t" + c.getResult().getString(2) + "\t" + c.getResult().getString(3) + "\t" + c.getResult().getString(4) + "\t" + c.getResult().getString(5) + "\t" + c.getResult().getString(6) + "\t" + c.getResult().getString(7) + "\t" + c.getResult().getString(8) + "\t" + c.getResult().getString(9) + "\t" + c.getResult().getString(10) + "\t" + c.getResult().getString(11) + "\t" + c.getResult().getString(11) + "\n");
+                        bw.write(c.getResult().getString(1) + "\t" + c.getResult().getString(2) + "\t" + c.getResult().getString(3) + "\t" + c.getResult().getString(4) + "\t" + c.getResult().getString(5) + "\t" + c.getResult().getString(6) + "\t" + c.getResult().getString(7) + "\t" + c.getResult().getString(8) + "\t" + c.getResult().getString(9) + "\t" + c.getResult().getString(10) + "\t" + c.getResult().getString(11) + "\t0\t0\n");
                     }
                 } else {
-                    c.executeQuery("SELECT STT_CODE_EXT,STT_CODE_ENT,'" + dt + "',EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER,1,0,SUM(PASS1),0,0 FROM P114_TMP "
-                            + "WHERE SUBSTR (STT_CODE_EXT, 0, 1) = '" + line + "'  GROUP BY STT_CODE_EXT,STT_CODE_ENT,EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER  ORDER BY STT_CODE_EXT");
+                    c.executeQuery("SELECT STT_CODE_EXT,STT_CODE_ENT,'" + dt + "',TOLL_DT,EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER,1,0,SUM(PASS1),0,0 FROM P114_TMP "
+                            + "WHERE SUBSTR (STT_CODE_EXT, 0, 1) = '" + line + "'  "
+                            + " GROUP BY STT_CODE_EXT,TOLL_DT,STT_CODE_ENT,EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER  ORDER BY STT_CODE_EXT");
                     while (c.getResult().next()) {
-                        bw.write(c.getResult().getString(1) + "\t" + c.getResult().getString(2) + "\t" + c.getResult().getString(3) + "\t" + c.getResult().getString(4) + "\t" + c.getResult().getString(5) + "\t" + c.getResult().getString(6) + "\t" + c.getResult().getString(7) + "\t" + c.getResult().getString(8) + "\t" + c.getResult().getString(9) + "\t" + c.getResult().getString(10) + "\t" + c.getResult().getString(11) + "\t" + c.getResult().getString(12) + "\t" + c.getResult().getString(13) + "\n");
+                        bw.write(c.getResult().getString(1) + "\t" + c.getResult().getString(2) + "\t" + c.getResult().getString(3) + "\t" + c.getResult().getString(4) + "\t" + c.getResult().getString(5) + "\t" + c.getResult().getString(6) + "\t" + c.getResult().getString(7) + "\t" + c.getResult().getString(8) + "\t" + c.getResult().getString(9) + "\t" + c.getResult().getString(10) + "\t" + c.getResult().getString(11) + "\t" + c.getResult().getString(12) + "\t" + c.getResult().getString(13) + "\t0\n");
                     }
                 }
                 br.close();

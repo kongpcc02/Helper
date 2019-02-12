@@ -56,7 +56,7 @@
                             ประเภทการให้บรอก่าร : </td>
                         <td>
                             <select >
-                                <option>--ประเภทการให้บริการ--</option>
+                                <option>--ประเภทการให้บริการ-ssss-</option>
                             </select>
                         </td>
                     </tr>

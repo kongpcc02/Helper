@@ -38,14 +38,19 @@ public class P112Controller extends HttpServlet {
             String dateArr[] = fDate.split("/");
             String dateFind = dateArr[2] + dateArr[0] + dateArr[1];
 
-            String txtTrx = "TL_" + line + "_ETC_CLS_TRF_" + dateFind + ".gw";
-            String txtRev = "TL_" + line + "_ETC_CLS_REV_" + dateFind + ".gw";
+//            String dateArr[] = d1.split("/");
+            String yy = dateArr[2];
+            String mm = dateArr[0];
+            String dd = dateArr[1];
+
+            String txtTrx = "TL_" + line + "_ETC_CLS_TRF_TOLL_" + dateFind + ".gw";
+            String txtRev = "TL_" + line + "_ETC_CLS_REV_TOLL_" + dateFind + ".gw";
 
             P112Service p = new P112Service();
             out.println("<br>===create trf file===");
-            out.println(p.importCyber(txtTrx));
+            out.println(p.importCyber(txtTrx, dd + mm + yy));
             out.println("<br>===create rev file===");
-            out.println(p.importCyber(txtRev));
+            out.println(p.importCyber(txtRev, dd + mm + yy));
             out.println("<br>==============success end.===============");
         } catch (Exception e) {
             out.println("<br> Error ==> " + e);
