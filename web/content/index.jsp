@@ -31,6 +31,7 @@
                             <input   type="button" value="P112 นำเข้าข้อมูลสายทางบูรพาวิถี" onclick=window.location="<%=request.getContextPath() + "/content/Program/P112.jsp"%>">
                             <input   type="button" value="P113 อัพเดทข้อมุลจากระบบจัดเก็บ" onclick=window.location="<%=request.getContextPath() + "/content/Program/P113.jsp"%>">
                             <input   type="button" value="P114 แปลงข้อมูลของสายทาง 7,9" onclick=window.location="<%=request.getContextPath() + "/content/Program/P114.jsp"%>">
+                            <input   type="button" value="P115 แปลงข้อมูลทางด่วนขั้นที่ 2 ศรีรัช" onclick=window.location="<%=request.getContextPath() + "/content/Program/P115.jsp"%>">
                         </fieldset>
                     </td>
                     <td width="30%" valign="top">
