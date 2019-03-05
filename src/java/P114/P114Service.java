@@ -88,7 +88,7 @@ public class P114Service extends Helper {
 
     public static void main(String[] args) {
         P114Service s = new P114Service();
-        System.out.println(s.convertData("TL_07_ETC_CLS_REV_20170204.txt", "7", "04022017"));
+        System.out.println(s.convertData("TL_07_ETC_CLS_REV_20170205.txt", "7", "04022017"));
 
     }
 }
