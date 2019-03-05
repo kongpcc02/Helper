@@ -38,8 +38,8 @@ public class P112Controller extends HttpServlet {
             String dateArr[] = fDate.split("/");
             String dateFind = dateArr[2] + dateArr[0] + dateArr[1];
 
-            String txtTrx = "TL_" + line + "_ETC_CLS_TRF_" + dateFind + ".gw";
-            String txtRev = "TL_" + line + "_ETC_CLS_REV_" + dateFind + ".gw";
+            String txtTrx = "TL_" + line + "_ETC_CLS_TRF_TOLL_" + dateFind + ".gw";
+            String txtRev = "TL_" + line + "_ETC_CLS_REV_TOLL_" + dateFind + ".gw";
 
             P112Service p = new P112Service();
             out.println("<br>===create trf file===");
