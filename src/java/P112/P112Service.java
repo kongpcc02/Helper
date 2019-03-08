@@ -55,14 +55,14 @@ public class P112Service extends Helper {
                 while ((sCurrentLine = br.readLine()) != null) {
                     String[] str = sCurrentLine.split("\t");
                     String stt = str[0];
-                    if (stt.equals("403")) {
+                   /* if (stt.equals("403")) {
                         if (str[9].indexOf("1") < 0 && str[9].indexOf("2") < 0 && str[9].indexOf("3") < 0) {//ด่าน 404 
                             stt = "404";
                         }
-                    }
-                    if (stt.equals("403") || stt.equals("404")) {
-                        System.out.println(stt + " | " + str[9] + " | " + str[11]);
-                    }
+                    }*/
+                    //if (stt.equals("403") || stt.equals("404")) {
+                      //  System.out.println(stt + " | " + str[9] + " | " + str[11]);
+                    //}
                     c.addBatch("INSERT INTO P112_TMP VALUES('" + stt + "','" + str[2] + "','" + str[5] + "','" + str[6] + "','" + str[7] + "','" + str[8] + "','" + str[9] + "','" + str[10] + "','" + str[11] + "','" + str[12] + "','" + str[13] + "','" + str[1] + "','" + str[4] + "','" + str[3] + "')");
                     //   System.out.println("INSERT INTO P112_TMP VALUES('" + str[0] + "','" + str[2] + "','" + str[5] + "','" + str[6] + "','" + str[7] + "','" + str[8] + "','" + str[9] + "','" + str[10] + "','" + str[11] + "','" + str[12] + "','" + str[13] + "','" + str[1] + "','" + str[4] + "','" + str[3] + "')");
                 }
@@ -114,7 +114,7 @@ public class P112Service extends Helper {
 
     public static void main(String[] args) {
         P112Service p = new P112Service();
-        System.out.println(p.importCyber("TL_04_ETC_CLS_TRF_TOLL_20190222.gw", "22022019"));
+        System.out.println(p.importCyber("TL_04_ETC_CLS_REV_TOLL_20190222.gw", "22022019"));
         //System.out.println("5,6".indexOf("3"));
     }
 }
