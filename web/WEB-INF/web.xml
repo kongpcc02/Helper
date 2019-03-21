@@ -136,6 +136,10 @@
         <servlet-name>P115Controller</servlet-name>
         <servlet-class>P115.P115Controller</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>P112_0Controller</servlet-name>
+        <servlet-class>P112.P112_0Controller</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -271,6 +275,10 @@
     <servlet-mapping>
         <servlet-name>P115Controller</servlet-name>
         <url-pattern>/P115Controller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>P112_0Controller</servlet-name>
+        <url-pattern>/P112_0Controller</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

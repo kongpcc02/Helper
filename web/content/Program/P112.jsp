@@ -17,14 +17,26 @@
             };
             function rev() {
                 $('#log').html("Loading...")
-                $.post("/Helper/P112Controller",
-                        {
-                            fDate: $('#dd').val(),
-                            line: $('#line').val()
-                        },
-                function (data) {
-                    $('#log').html(data)
-                });
+                if ($('#line').val() == "060") {
+                    $.post("/Helper/P112_0Controller",
+                            {
+                                fDate: $('#dd').val()
+                            },
+                            function (data) {
+                                $('#log').html(data)
+                            });
+
+                } else {
+                    $.post("/Helper/P112Controller",
+                            {
+                                fDate: $('#dd').val(),
+                                line: $('#line').val()
+                            },
+                            function (data) {
+                                $('#log').html(data)
+                            });
+
+                }
             }
             function process() {
                 if ($("#dd").val() == "") {
@@ -44,7 +56,7 @@
         <table width="50%" class="form" >
             <tr>
                 <td align="right"><b>วันที่ :</b></td>
-                <td><input  id="dd" type="text" onclick="this.value = ''"/>
+                <td><input  id="dd" type="text" onclick="this.value = ''" autocomplete="off"/>
                 </td>
             </tr>
             <tr>
@@ -53,6 +65,7 @@
                     <select id="line" >
                         <option value="04">04</option>
                         <option value="06">06</option>
+                        <option value="060">06 สำหรับเลน 0</option>
                     </select>
                 </td>
             </tr>
