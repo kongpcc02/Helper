@@ -82,7 +82,32 @@ public class P115Service extends Helper {
     public static void main(String[] args) {
         P115Service p = new P115Service();
     }
-
+    
+    public boolean scheduleConvertData(String reqDate)throws ParseException, FileNotFoundException, IOException, Exception{
+        String date2Y = util.DateUtil.convertFormat(reqDate, "yyyyMMdd", "yyMMdd");
+        String date4Y = reqDate;
+        String fileParentsName = date2Y + ".txt";
+        if (!hasParentsFileShift(fileParentsName)) {
+            System.out.println("File Not Found " + fileParentsName);
+            return false;
+        }
+        ArrayList<String[]> arrList = readFile(fileParentsName, date4Y);
+        if (arrList == null) {
+            System.out.println("Data was wrong");
+            return false;
+        }
+        insertDataToTextBecl(arrList, "dms_text_becl", date4Y);
+        selectData(date4Y, "TRF");
+        selectData(date4Y, "REV");
+        if (createFile("TRF", date4Y)) {
+            System.out.println("Create File " + "TL_02_TRF_OPN_" + date4Y + ".mnl" + " Success");
+        }
+        if (createFile("REV", date4Y)) {
+            System.out.println("Create File " + "TL_02_REV_OPN_" + date4Y + ".mnl" + " Success");
+        }
+        return true;
+    }
+    
     public StringBuilder convertData(String reqDate) throws ParseException, FileNotFoundException, IOException, Exception {
         StringBuilder strBuilder = new StringBuilder();
         String date2Y = util.DateUtil.convertFormat(reqDate, "MM/dd/yyyy", "yyMMdd");

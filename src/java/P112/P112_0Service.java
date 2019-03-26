@@ -13,6 +13,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import com.Helper.Helper;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -29,15 +32,18 @@ public class P112_0Service extends Helper {
             String date = util.DateUtil.convertFormat(reqDate, "MM/dd/yyyy", "yyyyMMdd");
             String fileName = "TL_06_ETC_CLS_TRF_L0_" + date + ".txt";
             System.out.println("File Name : " + fileName);
-            InputStream reader = retrieveFromFTP("import/DMS", fileName);
+            InputStream reader = retrieveFromFTP("import/DMS/", fileName);
+//            System.out.println (reqDate + "   1  "+ reader );
             if (reader == null) {
                 strBuilder.append("<br>--ไม่มีไฟล์จาก (DMS)--");
-                reader = retrieveFromFTP("import/DMS_FOR_TEST", fileName);
+                reader = retrieveFromFTP("import/DMS_FOR_TEST/", fileName);
+//                System.out.println (reqDate + "   2  "+ reader );
             }
             if (reader == null) {
                 strBuilder.append("<br>--ไม่มีการส่งไฟล์--");
                 return strBuilder;
             } else {
+                
                 connector.connect();
                 connector.executeUpdate("DELETE FROM P112_TMP ");
                 strBuilder.append("<br>--clear--");
@@ -84,6 +90,7 @@ public class P112_0Service extends Helper {
                 uploadToFTP("D:\\pluginRVA\\P112\\Tmp\\", fileName.replace(".txt", ".mnl"));
                 strBuilder.append("<br>--นำเข้า cyber เรียบร้อย--");
             }
+            
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,4 +103,42 @@ public class P112_0Service extends Helper {
 //        return strBuilder;
     }
 
+    private void a() {
+        try {
+            String startDate = "01/01/2019";
+            String endDate = "02/01/2019";
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            Date date = sdf.parse(startDate);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            while (true) {
+                if(!compareBeforeDate(sdf.format(cal.getTime()),endDate)){
+                    break;
+                }
+                convertDataLane0(sdf.format(cal.getTime()));
+                
+                cal.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    public static void main(String[] arg) {
+        P112_0Service pp = new P112_0Service();
+//        pp.a();
+    }
+
+    private boolean compareBeforeDate(String lastDate, String yesterday) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        Date lastShiftDate = sdf.parse(lastDate);
+        Date yesterday1 = sdf.parse(yesterday);
+        if (lastShiftDate.before(yesterday1)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
