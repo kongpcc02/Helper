@@ -32,10 +32,11 @@ public class P115Schedule extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected String processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        out.write("Start");
         try {
             while (true) {
                 System.out.println("Last shift | " + getLastShiftDate());
@@ -50,10 +51,12 @@ public class P115Schedule extends HttpServlet {
                 }
                 out.write("create file of date "+nextDate +" success \n");
             }
-            return "Success";
+            out.write("End");
+            //return "Success";
         }catch(Exception ex){
+            out.write(ex.printStackTrace);
             ex.printStackTrace();
-            return "Failed : "+ex.getMessage();
+            //return "Failed : "+ex.getMessage();
         }finally {
             out.close();
         }
