@@ -36,7 +36,7 @@ public class P115Schedule extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.write("Start");
+        out.write("Start \n");
         try {
             while (true) {
                 System.out.println("Last shift | " + getLastShiftDate());
@@ -51,7 +51,7 @@ public class P115Schedule extends HttpServlet {
                 }
                 out.write("create file of date "+nextDate +" success \n");
             }
-            out.write("End");
+            out.write("End \n");
             //return "Success";
         }catch(Exception ex){
             out.write(ex.getMessage());
