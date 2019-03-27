@@ -48,6 +48,7 @@ public class P115Schedule extends HttpServlet {
                 if (!p115Service.scheduleConvertData(nextDate)) {
                     break;
                 }
+                out.write("create file of date "+nextDate +" success \n");
             }
             return "Success";
         }catch(Exception ex){
