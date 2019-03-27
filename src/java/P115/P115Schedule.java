@@ -54,7 +54,7 @@ public class P115Schedule extends HttpServlet {
             out.write("End");
             //return "Success";
         }catch(Exception ex){
-            out.write(ex.printStackTrace);
+            out.write(ex.printStackTrace());
             ex.printStackTrace();
             //return "Failed : "+ex.getMessage();
         }finally {
