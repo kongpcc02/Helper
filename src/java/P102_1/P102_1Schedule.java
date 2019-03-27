@@ -124,7 +124,7 @@ public class P102_1Schedule extends HttpServlet {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         calendar.add(Calendar.DAY_OF_YEAR, -1);
-        calendar.set(Calendar.YEAR, (Calendar.getInstance().get(Calendar.YEAR) - 543));
+        //calendar.set(Calendar.YEAR, (Calendar.getInstance().get(Calendar.YEAR) - 543));
         return sdf.format(calendar.getTime());
     }
 
