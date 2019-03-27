@@ -125,6 +125,8 @@ public class P115Schedule extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        out.write("Get Method");
         processRequest(request, response);
     }
 
@@ -139,6 +141,8 @@ public class P115Schedule extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        out.write("Post Method");
         processRequest(request, response);
     }
 
