@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package P115;
+package P116;
 
-import P112.P112Service;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author siridet_suk
+ * @author chonpisit_klo
  */
-public class P115Controller extends HttpServlet {
+public class P116Controller extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,23 +32,16 @@ public class P115Controller extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        long startTime = System.currentTimeMillis();
         try {
-            out.println("<p><br>==============start===============");
-            String reqDate = request.getParameter("date");
-            boolean isUpdate = Boolean.parseBoolean(request.getParameter("update"));
-            P115Service pService = new P115Service();
-            if (!isUpdate) {
-                out.println(pService.checkDataExist(isUpdate, reqDate));
-            } else {
-                out.println(pService.convertData(reqDate));
-            }
-            out.println("<br>ใช้เวลา : " + (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - startTime) + 1) + " นาที");
-            out.println("<br>==============success end.===============</p>");
-        } catch (Exception e) {
-            out.println("<br><p> Error ==> <p style=\"color:red\">" + e + "</p>");
-            out.println("<br>Use time : " + (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - startTime) + 1) + " นาที");
-            out.println("<br>==============fail end.===============</p>");
+            P116Service p116Service = new P116Service();
+            String date = request.getParameter("date");
+            p116Service.transferData(date);
+            out.println("นำไฟล์เข้าระบบ Cyber สำเร็จ");
+        }catch (FileNotFoundException ex) {
+            out.println(ex);
+        }
+        catch (Exception ex) {
+            out.println(ex.getMessage());
         } finally {
             out.close();
         }

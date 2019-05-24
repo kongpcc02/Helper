@@ -295,7 +295,43 @@ public abstract class Helper {
 //            is.close();
 //            os.close();
 //            ftpClient.closeServer();
-            System.out.println("Upload " + fileName + " success.Use time : " + (System.currentTimeMillis() - startTime)+" ms.");
+            System.out.println("Upload " + fileName + " success.Use time : " + (System.currentTimeMillis() - startTime) + " ms.");
+        } catch (Exception ex) {
+            System.out.println("Helper : " + ex.getMessage());
+        }
+    }
+
+    private InputStream getFileETC(String fileName) {
+        InputStream inputStr = null;
+        try {
+            SmbFile fRMT = new SmbFile("smb://" + this.newBECLFilePath + fileName, this.authentication);
+            return fRMT.getInputStream();
+        } catch (Exception ex) {
+            System.out.println("Error Exception : " + ex.getMessage());
+            return inputStr;
+        }
+    }
+
+    public void uploadETCToFTP(String fileName) {
+        try {
+            long startTime = System.currentTimeMillis();
+            FTPClient ftpClient = new FTPClient();
+            ftpClient.connect("1.3.4.3", 21);
+            if (!ftpClient.login("appint", "apPInt")) {
+                System.out.println("เกิดข้อผิดพลาด : รหัสผ่านในการเข้าใช้ FTP ผิด ");
+                return;
+            }
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.changeWorkingDirectory("import/DMS");
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            ftpClient.setFileTransferMode(FTP.BINARY_FILE_TYPE);
+            ftpClient.setBufferSize(1024000);
+            InputStream inputStr = getFileETC(fileName);
+            ftpClient.storeFile(fileName, inputStr);
+            ftpClient.logout();
+            ftpClient.disconnect();
+            inputStr.close();
+            System.out.println("Upload " + fileName + " success.Use time : " + (System.currentTimeMillis() - startTime) + " ms.");
         } catch (Exception ex) {
             System.out.println("Helper : " + ex.getMessage());
         }

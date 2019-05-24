@@ -148,6 +148,10 @@
         <servlet-name>P102_1Schedule</servlet-name>
         <servlet-class>P102_1.P102_1Schedule</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>P116Controller</servlet-name>
+        <servlet-class>P116.P116Controller</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -295,6 +299,10 @@
     <servlet-mapping>
         <servlet-name>P102_1Schedule</servlet-name>
         <url-pattern>/P102_1Schedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>P116Controller</servlet-name>
+        <url-pattern>/P116Controller</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
