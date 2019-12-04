@@ -46,7 +46,7 @@
         <table width="50%" class="form" >
             <tr >
                 <td align="right"><b>วันที่ :</b></td>
-                <td><input  id="dd" type="text" onclick="this.value = ''"/> - <input  id="dd2" type="text" onclick="this.value = ''"/>
+                <td><input  id="dd" type="text" onclick="this.value = ''" autocomplete = "off"/> - <input  id="dd2" type="text" onclick="this.value = ''" autocomplete = "off"/>
 
                 </td>
             </tr> <tr>

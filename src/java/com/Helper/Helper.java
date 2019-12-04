@@ -6,14 +6,19 @@ package com.Helper;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 /**
  *
@@ -26,7 +31,7 @@ public abstract class Helper {
     protected final String newShiftBECLFilePath = "172.16.22.19/data/becl/shift/";
     public static final String domain = "172.16.22.19";
     public static final String domainUserName = "administrator";
-    public static final String domainPassword = "P@ssw0rd";
+    public static final String domainPassword = "B@em2exat";
     public static final NtlmPasswordAuthentication authentication = new NtlmPasswordAuthentication(domain, domainUserName, domainPassword);
 
     /**
@@ -129,6 +134,24 @@ public abstract class Helper {
         ftpClient.changeWorkingDirectory(pName);
 
         return ftpClient.retrieveFileStream(fName);
+    }
+
+    public void uploadFtpSap() throws IOException {
+        FTPClient ftpClient = new FTPClient();
+        ftpClient.connect("192.168.100.22", 21);
+        System.out.println("Reply from FTP : " + ftpClient.getReplyCode());
+        if (!ftpClient.login("rvauser", "rvauser")) {
+            System.out.println("เกิดข้อผิดพลาด : รหัสผ่านในการเข้าใช้ FTP ผิด ");
+        }
+        ftpClient.enterLocalPassiveMode();
+        ftpClient.changeWorkingDirectory("../Interface/RVA/import/AR");
+//        ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+//        ftpClient.setFileTransferMode(FTP.BINARY_FILE_TYPE);
+//        File file_in = new File(pName + fName);
+//        FileInputStream is = new FileInputStream(file_in);
+//        ftpClient.storeFile(fName, is);
+        ftpClient.logout();
+//        is.close();
     }
 
     /**
@@ -301,7 +324,7 @@ public abstract class Helper {
         }
     }
 
-    private InputStream getFileETC(String fileName) {
+    protected InputStream getFileETC(String fileName) {
         InputStream inputStr = null;
         try {
             SmbFile fRMT = new SmbFile("smb://" + this.newBECLFilePath + fileName, this.authentication);
@@ -336,4 +359,68 @@ public abstract class Helper {
             System.out.println("Helper : " + ex.getMessage());
         }
     }
+
+    public static InputStream getFileSapRva(String fileName) throws Exception {
+        FTPClient ftpClient = new FTPClient();
+        ftpClient.connect("192.168.100.22", 21);
+        ftpClient.login("rvauser", "rvauser");
+        ftpClient.enterLocalPassiveMode();
+        ftpClient.changeWorkingDirectory("/usr/sap/trans/Interface/RVA/import/AR");
+        FTPFile[] fileList = ftpClient.listFiles();
+        InputStream fileStr = ftpClient.retrieveFileStream(fileName);
+        FTPFile fileSap = null;
+        for (FTPFile file : fileList) {
+            if (file.getName().equals(fileName)) {
+                fileSap = file;
+            }
+        }
+        return fileStr;
+    }
+
+    public void uploadSapRva(HashMap file) throws Exception {
+        long startTime = System.currentTimeMillis();
+        FTPClient ftpClient = new FTPClient();
+        ftpClient.connect("192.168.100.22", 21);
+        if (!ftpClient.login("rvauser", "rvauser")) {
+            System.out.println("เกิดข้อผิดพลาด : รหัสผ่านในการเข้าใช้ FTP ผิด ");
+            return;
+        }
+        ftpClient.enterLocalPassiveMode();
+        ftpClient.changeWorkingDirectory("/usr/sap/trans/Interface/RVA/import/AR");
+        ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+        ftpClient.setFileTransferMode(FTP.BINARY_FILE_TYPE);
+        ftpClient.setBufferSize(1024000);
+        String pathName = file.get("pathName").toString();
+        InputStream inputStr = getFileSap(pathName, file.get("fileNameDoh").toString());
+        ftpClient.storeFile(file.get("fileNameDoh").toString(), inputStr);
+        inputStr.close();
+        inputStr = getFileSap(pathName, file.get("fileNameExat").toString());
+        ftpClient.storeFile(file.get("fileNameExat").toString(), inputStr);
+        inputStr.close();
+        ftpClient.logout();
+        ftpClient.disconnect();
+
+    }
+
+    protected InputStream getFileSap(String pathName, String fileName) {
+        InputStream inputStr = null;
+        try {
+            File file = new File(pathName + "\\" + fileName);
+            inputStr = new FileInputStream(file);
+            return inputStr;
+        } catch (Exception ex) {
+            System.out.println("Error Exception : " + ex.getMessage());
+            ex.printStackTrace();
+            return inputStr;
+        }
+    }
+
+    public static void main(String[] agrs) {
+        try {
+            System.out.println(getFileSapRva("SAP_06_AR_TL_20190601.txt"));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

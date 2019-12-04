@@ -34,7 +34,6 @@ public class EtaConnections {
 
     public ResultSet doQuery(String ls_sql) {
 
-
         try {
             this.stmt = cnn.createStatement();
             Oj_rs = stmt.executeQuery(ls_sql);
@@ -45,6 +44,26 @@ public class EtaConnections {
         }
 
         return null;
+    }
+
+    public static String getDATABASE_SERVER_IP() {
+        return DATABASE_SERVER_IP;
+    }
+
+    public static String getDATABASE_SERVER_PORT() {
+        return DATABASE_SERVER_PORT;
+    }
+
+    public static String getDATABASE_SID() {
+        return DATABASE_SID;
+    }
+
+    public static String getDATABASE_USER() {
+        return DATABASE_USER;
+    }
+
+    public static String getDATABASE_PASS() {
+        return DATABASE_PASS;
     }
 
     public boolean doExecute(String ls_sql) {

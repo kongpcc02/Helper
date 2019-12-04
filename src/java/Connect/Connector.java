@@ -31,13 +31,31 @@ public class Connector {
         this.password = ConfigGateway.getPass();
         this.dbName = ConfigGateway.getDbname();
     }
-
+    
+    public void connectEta() throws Exception{
+        this.host = EtaConnections.getDATABASE_SERVER_IP();
+        this.username = EtaConnections.getDATABASE_USER();
+        this.password = EtaConnections.getDATABASE_PASS();
+        this.dbName = EtaConnections.getDATABASE_SID();
+        connect();
+    }
     public Connector(String host, String username, String password, String dbName, String port) {
         this.host = host;
         this.username = username;
         this.password = password;
         this.dbName = dbName;
         this.port = port;
+        
+    }
+    
+    public void connectSqlServer() throws Exception {
+        System.out.println("Connect sql server");
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        conn = (Connection) DriverManager.getConnection("jdbc:sqlserver://" + host + ";databaseName=" + dbName+";user="+ username+";password="+ password);
+//        jdbc:sqlserver://localhost:1433;databaseName=PUBS
+//String connectionUrl = "jdbc:sqlserver://<server>:<port>;databaseName=AdventureWorks;user=<user>;password=<password>";
+
+        stmt = conn.createStatement();
     }
 
     public void connect() throws Exception {

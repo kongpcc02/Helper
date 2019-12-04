@@ -33,6 +33,7 @@
                             <input   type="button" value="P114 แปลงข้อมูลของสายทาง 7,9" onclick=window.location="<%=request.getContextPath() + "/content/Program/P114.jsp"%>">
                             <input   type="button" value="P115 แปลงข้อมูลทางด่วนขั้นที่ 2 ศรีรัช" onclick=window.location="<%=request.getContextPath() + "/content/Program/P115.jsp"%>">
                             <input   type="button" value="P116 นำเข้าข้อมูลการให้บริการและเงินนำส่งธนาคาร(ETC) ศรีรัช-วงแหวน" onclick=window.location="<%=request.getContextPath() + "/content/Program/P116.jsp"%>">
+                            <input   type="button" value="P117 ส่งออกข้อมูลรายได้ค่าผ่านทางเงินสด(แยก กทพ.และทล.)ไปยังระบบ SAP" onclick=window.location="<%=request.getContextPath() + "/content/Program/P117.jsp"%>">
                         </fieldset>
                     </td>
                     <td width="30%" valign="top">

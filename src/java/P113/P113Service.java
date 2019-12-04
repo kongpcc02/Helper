@@ -17,6 +17,7 @@ public class P113Service {
         StringBuffer str = new StringBuffer();
         Connector c = new Connect.Connector("172.20.1.9", "rvauser", "userrva_", "etanetdb", "1521");
         try {
+            System.out.println("22");
             c.connect();
             String sql = "UPDATE RVA_TRX_ETC_OPN_rev trx_rev SET trx_rev.PASS_REV1 = (SELECT int_REV.PASS_REV1 FROM RVA_TRX_ETC_OPN mst, RVA_INT_ETC_OPN_rev int_rev  WHERE  	trx_rev.OPN_ID = mst.OPN_ID "
                     + "	AND mst.TRX_DATE BETWEEN TO_DATE('" + d1 + "', 'ddmmyyyy') "
@@ -46,7 +47,7 @@ public class P113Service {
                     + "		AND TRX_REV.ISSUER_ID = INT_REV.ISSUER_ID "
                     + "		AND TRX_REV.PASS_ID = INT_REV.PASS_ID "
                     + "		AND TRX_REV.LINE_CODE = INT_REV.LINE_CODE )";
-
+            System.out.println(sql);
             c.executeUpdate(sql);
         } catch (Exception ex) {
             str.append("ERROR==").append(ex);
@@ -101,9 +102,10 @@ public class P113Service {
                     + "		AND TRX_REV.PASS_ID = INT_REV.PASS_ID  "
                     + "		AND TRX_REV.LINE_CODE = INT_REV.LINE_CODE  "
                     + "	)";
-
+            System.out.println(sql);
             c.executeUpdate(sql);
         } catch (Exception ex) {
+            ex.printStackTrace();
             str.append("ERROR==").append(ex.getMessage());
         } finally {
             c.close();

@@ -278,10 +278,10 @@ public class P111Service extends Helper {
 
     }
 
-    public static void main(String[] args) throws IOException {
-        P111Service p = new P111Service();
-        //  System.out.println(p.importGateWay("01/01/2017", "1"));
-        List<TRXModel> d = p.retriveDataDoh("01/01/2017", "7");
-
-    }
+//    public static void main(String[] args) throws IOException {
+//        P111Service p = new P111Service();
+//        //  System.out.println(p.importGateWay("01/01/2017", "1"));
+//        List<TRXModel> d = p.retriveDataDoh("01/01/2017", "7");
+//
+//    }
 }

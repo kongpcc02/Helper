@@ -152,6 +152,14 @@
         <servlet-name>P116Controller</servlet-name>
         <servlet-class>P116.P116Controller</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>P117Controller</servlet-name>
+        <servlet-class>P117.P117Controller</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>P118Controller</servlet-name>
+        <servlet-class>P118.P118Controller</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -303,6 +311,14 @@
     <servlet-mapping>
         <servlet-name>P116Controller</servlet-name>
         <url-pattern>/P116Controller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>P117Controller</servlet-name>
+        <url-pattern>/P117Controller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>P118Controller</servlet-name>
+        <url-pattern>/P118Controller</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

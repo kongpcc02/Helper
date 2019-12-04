@@ -84,9 +84,9 @@ public class P102_1Service extends Helper {
         return txt;
     }
 
-    public static void main(String[] args) throws IOException {
-        P102_1Service sv = new P102_1Service();
-        sv.readAndCreateFile("TL_02_ETC_OPN_TRF_20170225.txt");
-        sv.readAndCreateFile("TL_02_ETC_OPN_REV_20170225.txt");
-    }
+//    public static void main(String[] args) throws IOException {
+//        P102_1Service sv = new P102_1Service();
+//        sv.readAndCreateFile("TL_02_ETC_OPN_TRF_20170225.txt");
+//        sv.readAndCreateFile("TL_02_ETC_OPN_REV_20170225.txt");
+//    }
 }
