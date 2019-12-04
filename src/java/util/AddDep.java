@@ -26,15 +26,23 @@ public class AddDep {
             sqlConnect.connectSqlServer();
 // ----------------------- UPDATE EMP DEP FROM DEPTAB -----------------------
             int count = 0;
-            String sqlRvaUser = "select * from sec_user_back_up  where active_status = 'A' and user_name != 'opas_auk'";
-            String sqlDepTab = "", sqlUpdate = "";
+            String sqlRvaUser = "select * from sec_user_back_up  where active_status = 'A' and user_name != 'opas_auk' ";
+            String sqlDepTab = "", sqlUpdate = "", sqlOrg = "";
             ResultSet resultRvaUser = connect.executeQuery(sqlRvaUser);
             while (resultRvaUser.next()) {
                 count++;
                 sqlDepTab = "select * from per_pertab where empid = '" + resultRvaUser.getString("user_name").substring(1) + "'";
                 ResultSet deptabUser = sqlConnect.executeQuery(sqlDepTab);
                 if (deptabUser.next() == true) {
-                    System.out.println(deptabUser.getString("empid"));
+//                    System.out.println(deptabUser.getString("empid"));
+                    sqlOrg = "select * from sec_org_back_up where  org_code = '" + deptabUser.getString("depcod") + "'";
+                    System.out.println(sqlOrg);
+                    ResultSet resultOrg = connect.executeQuery(sqlOrg);
+                    if (resultOrg.next() == true) {
+                        sqlUpdate = "update sec_user_back_up set org_id = '"+resultOrg.getString("org_id")+"' where user_name = '"+resultRvaUser.getString("user_name")+"'";
+                        System.out.println(sqlUpdate);
+                        connect.addBatch(sqlUpdate);
+                    }
 //                    continue;
                 }
 //                System.out.print("rva_sec  >>>  "+resultRvaUser.getString("user_name")+ "  dep_code  >  " + resultRvaUser.getString("org_code"));
@@ -45,6 +53,7 @@ public class AddDep {
 //
 //                }
             }
+            connect.executeBatch();
             System.out.println(count);
 
 // ----------------------- END -----------------------
