@@ -19,7 +19,7 @@ import java.util.Date;
 public class AddDep {
 
     public static void main(String[] args) {
-//        updateOrgRvaFromHr();
+        updateOrgRvaFromHr();
         updateUserOrgCompareHr();
 
     }
