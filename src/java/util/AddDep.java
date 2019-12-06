@@ -19,129 +19,102 @@ import java.util.Date;
 public class AddDep {
 
     public static void main(String[] args) {
-        Connector connect = new Connector();
-        Connector sqlConnect = new Connector("172.20.1.208", "HRUser_101", "cas1@lkilogmL", "EXATDB", "");
-        try {
-            connect.connectEta();
-            sqlConnect.connectSqlServer();
-// ----------------------- UPDATE EMP DEP FROM DEPTAB -----------------------
-            int count = 0;
-            String sqlRvaUser = "select * from sec_user_back_up  where active_status = 'A' and user_name != 'opas_auk' ";
-            String sqlDepTab = "", sqlUpdate = "", sqlOrg = "";
-            ResultSet resultRvaUser = connect.executeQuery(sqlRvaUser);
-            while (resultRvaUser.next()) {
-                count++;
-                sqlDepTab = "select * from per_pertab where empid = '" + resultRvaUser.getString("user_name").substring(1) + "'";
-                ResultSet deptabUser = sqlConnect.executeQuery(sqlDepTab);
-                if (deptabUser.next() == true) {
-//                    System.out.println(deptabUser.getString("empid"));
-                    sqlOrg = "select * from sec_org_back_up where  org_code = '" + deptabUser.getString("depcod") + "'";
-                    System.out.println(sqlOrg);
-                    ResultSet resultOrg = connect.executeQuery(sqlOrg);
-                    if (resultOrg.next() == true) {
-                        sqlUpdate = "update sec_user_back_up set org_id = '"+resultOrg.getString("org_id")+"' where user_name = '"+resultRvaUser.getString("user_name")+"'";
-                        System.out.println(sqlUpdate);
-                        connect.addBatch(sqlUpdate);
-                    }
-//                    continue;
-                }
-//                System.out.print("rva_sec  >>>  "+resultRvaUser.getString("user_name")+ "  dep_code  >  " + resultRvaUser.getString("org_code"));
-
-//                while (deptabUser.next()) {
-//                    System.out.println("deptab  >>>  " + deptabUser.getString("empid") + "  dep_code  >  " + deptabUser.getString("depcod"));
-//                    sqlUpdate = "update sec_user_back_up set ";
-//
-//                }
-            }
-            connect.executeBatch();
-            System.out.println(count);
-
-// ----------------------- END -----------------------
-// ----------------------- UPDATE ORG_BACK_UP FROM DEPTAB -----------------------
-// HAS SOME ERROR
-//            String sqlDep = "", sqlUpdate = "", sqlInsert = "";
-//            int count = 0, countInactive = 0, countActive = 0, countInsert = 0;
-//            String sqlOrg = "select * from sec_org_back_up";
-//            ResultSet resultDeptab, resultOrg;
-//            resultOrg = connect.executeQuery(sqlOrg);
-//            while (resultOrg.next()) {
-//                count++;
-//                sqlDep = "select * from SEC_ORG_DEPTAB where org_code = '" + resultOrg.getString("org_code") + "'";
-//                resultDeptab = connect.executeQuery(sqlDep);
-//                while (resultDeptab.next()) {
-//                    if ("I".equals(resultDeptab.getString("active_status"))) {
-//                        countInactive++;
-//                        System.out.println(count + " > " + resultDeptab.getString("org_dsc") + " Inactived ");
-//                        sqlUpdate = "update sec_org_back_up set active_status = 'I', end_date = to_date('09042018', 'ddMMyyyy') where org_code = '" + resultOrg.getString("org_code") + "'";
-//                        System.out.println(sqlUpdate);
-//                        connect.addBatch(sqlUpdate);
-//                        continue;
-//                    }
-//                    countActive++;
-//                    System.out.println(count + " > " + resultDeptab.getString("org_dsc") + " Actived ");
-//                }
-//            }
-//            connect.executeBatch();
-//            System.out.println("Count active > " + countActive);
-//            System.out.println("Count inactive > " + countInactive);
-//            connect.close();
-//            connect.connectEta();
-//            sqlDep = "select * from sec_org_deptab where active_status = 'A'";
-//            resultDeptab = connect.executeQuery(sqlDep);
-//            while (resultDeptab.next()) {
-//                sqlOrg = "select * from sec_org_back_up where org_code = '" + resultDeptab.getString("org_code") + "'";
-//                resultOrg = connect.executeQuery(sqlOrg);
-//                if (resultOrg.next()) {
-//                    System.out.println("Has deptab >  " + resultOrg.getString("org_code") + "   " + resultOrg.getString("active_status"));
-//                    continue;
-//                }
-//                countInsert++;
-//                sqlInsert = "insert into sec_org_back_up values( (select max(org_id)+1 from sec_org_back_up ), '" + resultDeptab.getString("org_code") + "', '" + resultDeptab.getString("org_dsc") + "', '3422', sysdate, '3422', sysdate, 'A', to_date('09042018', 'ddMMyyyy'), null )";
-//                System.out.println(sqlInsert);
-//                connect.addBatch(sqlInsert);
-//            }
-//            System.out.println(countInsert);
-//            connect.executeBatch();
-// ----------------------- END -----------------------
-//            connect.close();
-//            connect.connectEta();
-//            ResultSet resultDeptab = connect.executeQuery(sqlDep);
-//            System.out.println("-----------------------------------------------------------------------");
-//            while (resultDeptab.next()) {
-//                System.out.println(resultDeptab.getString("org_dsc"));
-//            }
-//            ArrayList<String> extSttCode = new ArrayList<String>();
-//            extSttCode.add("701");
-//            extSttCode.add("702");
-//            extSttCode.add("703");
-//            extSttCode.add("704");
-//            extSttCode.add("706");
-//            extSttCode.add("707");
-//            extSttCode.add("708");
-//            extSttCode.add("709");
-//            extSttCode.add("710");
-//            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-//            Date startDate = sdf.parse("01052019");
-//            Date endDate = sdf.parse("30092019");
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(startDate);
-//            while (calendar.getTime().before(endDate) || calendar.getTime().equals(endDate)) {
-//                String sqlInsert = "";
-//                for (String stationCode : extSttCode) {
-//                    sqlInsert = "insert into RVA_TRX_TOLL_CALC_ITEM values( (select max(id)+1 from RVA_TRX_TOLL_CALC_ITEM), '" + stationCode + "', to_date('" + sdf.format(calendar.getTime()) + "', 'ddMMyyyy'), '1777777777', '1', 40, 0, 0, 1, sysdate, sysdate)";
-//                    System.out.println(sqlInsert);
-//                    connect.addBatch(sqlInsert);
-//                }
-//                calendar.add(Calendar.DATE, 1);
-//            }
-//            connect.executeBatch();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            connect.close();
-            sqlConnect.close();
-        }
+//        updateOrgRvaFromHr();
+        updateUserOrgCompareHr();
 
     }
 
+    private static void updateOrgRvaFromHr() {
+        Connector rvaConnect = new Connector();
+        Connector hrConnect = new Connector("172.20.1.208", "HRUser_101", "cas1@lkilogmL", "EXATDB", "");
+        try {
+            rvaConnect.connectEta();
+            hrConnect.connectSqlServer();
+            String sqlRva = "", sqlHr = "", sqlUpdate = "", sqlInsert = "";
+            ResultSet resultRva, resultHr;
+            sqlRva = "select * from sec_org where org_code != 'DUMMY'";
+            resultRva = rvaConnect.executeQuery(sqlRva);
+            while (resultRva.next()) {
+                sqlHr = "select * from per_deptab where depcod = '" + resultRva.getString("org_code") + "'";
+                System.out.print("sql hr >>  " + sqlHr + "   result  > ");
+                resultHr = hrConnect.executeQuery(sqlHr);
+                if (resultHr.next() == true) {
+                    System.out.println(resultHr.getString("dflag"));
+//                    dflag O = Inactive, C = Active
+                    if ("O".equals(resultHr.getString("dflag"))) {
+                        sqlUpdate = "update sec_org set active_status = 'I', end_date = to_date('09042018', 'ddMMyyyy'), updated_by = '3422', updated_date = sysdate where org_code = '" + resultRva.getString("org_code") + "'";
+                        System.out.println(sqlUpdate);
+                        rvaConnect.addBatch(sqlUpdate);
+                    }
+                    continue;
+                } else {
+                    System.out.println("Not in HR deptab ");
+                    sqlUpdate = "update sec_org set active_status = 'I', end_date = to_date('09042018', 'ddMMyyyy'), updated_by = '3422', updated_date = sysdate    where org_code = '" + resultRva.getString("org_code") + "'";
+                    System.out.println(sqlUpdate);
+                    rvaConnect.addBatch(sqlUpdate);
+                }
+            }
+            rvaConnect.executeBatch();
+            rvaConnect.close();
+            rvaConnect.connectEta();
+            sqlHr = "select * from per_deptab where dflag = 'C'";
+            resultHr = hrConnect.executeQuery(sqlHr);
+            while (resultHr.next()) {
+                sqlRva = "select * from sec_org where org_code = '" + resultHr.getString("depcod") + "'";
+                resultRva = rvaConnect.executeQuery(sqlRva);
+                if (resultRva.next() == true) {
+                    System.out.println("Skip");
+                    continue;
+                }
+                sqlInsert = "insert into sec_org values( (select max(org_id)+1 from sec_org ), '" + resultHr.getString("depcod") + "', '" + resultHr.getString("depnam") + "', '3422', sysdate, '3422', sysdate, 'A', to_date('09042018', 'ddMMyyyy'), null )";
+                rvaConnect.addBatch(sqlInsert);
+                System.out.println(sqlInsert);
+            }
+            rvaConnect.executeBatch();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            rvaConnect.close();
+            hrConnect.close();
+        }
+    }
+
+    private static void updateUserOrgCompareHr() {
+        Connector rvaConnect = new Connector();
+        Connector hrConnect = new Connector("172.20.1.208", "HRUser_101", "cas1@lkilogmL", "EXATDB", "");
+        try {
+            int count = 0;
+            rvaConnect.connectEta();
+            hrConnect.connectSqlServer();
+            String sqlRva = "", sqlHr = "", sqlUpdate = "", sqlInsert = "", empId = "";
+            ResultSet resultRva, resultHr, resultRvaOrg;
+            sqlRva = "select * from sec_user where active_status = 'A' and user_name != 'opas_auk'";
+            resultRva = rvaConnect.executeQuery(sqlRva);
+            while (resultRva.next()) {
+                empId = resultRva.getString("user_name").substring(1);
+                sqlHr = "select * from per_pertab where empid = '" + empId + "'";
+                resultHr = hrConnect.executeQuery(sqlHr);
+                if (resultHr.next() == false) {
+                    continue;
+                }
+                sqlRva = "select * from sec_org where org_code = '" + resultHr.getString("depcod") + "'";
+                resultRvaOrg = rvaConnect.executeQuery(sqlRva);
+                if (resultRvaOrg.next() == false) {
+                    continue;
+                }
+                sqlUpdate = "update sec_user set org_id = '" + resultRvaOrg.getString("org_id") + "', updated_by = '3422', updated_date = sysdate where user_name = '" + resultRva.getString("user_name") + "'";
+                count++;
+                System.out.println(sqlUpdate);
+                rvaConnect.addBatch(sqlUpdate);
+            }
+            rvaConnect.executeBatch();
+            System.out.println(count);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            rvaConnect.close();
+            hrConnect.close();
+        }
+
+    }
 }
