@@ -48,7 +48,7 @@ public class AddDep {
                     }
                     continue;
                 } else {
-                    System.out.println("Not in HR deptab ");
+                    System.out.print("Not in HR deptab >>  ");
                     sqlUpdate = "update sec_org set active_status = 'I', end_date = to_date('09042018', 'ddMMyyyy'), updated_by = '3422', updated_date = sysdate    where org_code = '" + resultRva.getString("org_code") + "'";
                     System.out.println(sqlUpdate);
                     rvaConnect.addBatch(sqlUpdate);

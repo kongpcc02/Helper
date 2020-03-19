@@ -18,40 +18,40 @@
         <script type="text/javascript">
             var dp_cal;
             window.onload = function () {
-                dp_cal  = new Epoch('epoch_popup','popup',document.getElementById('d'));
+                dp_cal = new Epoch('epoch_popup', 'popup', document.getElementById('d'));
             };
 
-            function process(){
-                if($("#d").val()==""){
+            function process() {
+                if ($("#d").val() == "") {
                     alert("โปรดใส่วันที่ด้วยครับ !!");
-                }else{
+                } else {
                     $("#rs").addClass("loading");
                     $("#rs").html("Loading...");
 
                     $.post("/Helper/P104Controller",
-                    {
-                        d:$('#d').val()
-                    },
-                    function(data){
-                        $("#rs").removeAttr("class");
-                        $("#rs").html(data);
-                    }
-                );
+                            {
+                                d: $('#d').val()
+                            },
+                            function (data) {
+                                $("#rs").removeAttr("class");
+                                $("#rs").html(data);
+                            }
+                    );
                 }
             }
-            function look(){
+            function look() {
                 $("#rs").addClass("loading");
                 $("#rs").html("Loading...");
 
                 $.post("/Helper/CheckDateOfMonthNoInsert",
-                {
-                    m:$('#m').val(),
-                    y:$('#y').val()
-                },
-                function(data){
-                    $("#rs").removeAttr("class");
-                    $("#rs").html(data);
-                });
+                        {
+                            m: $('#m').val(),
+                            y: $('#y').val()
+                        },
+                        function (data) {
+                            $("#rs").removeAttr("class");
+                            $("#rs").html(data);
+                        });
             }
 
         </script>
@@ -61,7 +61,7 @@
         <input  type="button" value="กลับหน้าแรก" onclick="history.back()"  >
         <table width="50%"  class="form" cellpadding="5" cellspacing="0" >
             <tr>
-                <td >วันที่ : <input class="r" id="d" type="text" onclick="this.value=''"/>
+                <td >วันที่ : <input class="r" id="d" type="text" onclick="this.value = ''"/>
                     <input onclick="process();" type="button" value=" นำเข้าข้อมูล ">
 
                 </td>
@@ -87,15 +87,16 @@
                         <option value="12">ธ.ค</option>
                     </select>
                     <select id="y">
-                        <option value="2011">2554</option>
-                        <option value="2012">2555</option>
-                        <option value="2013">2556</option>
-                        <option value="2014">2557</option>
-                        <option value="2015">2558</option>
                         <option value="2016">2559</option>
                         <option value="2017">2560</option>
                         <option value="2018">2561</option>
                         <option value="2019">2562</option>
+                        <option value="2018">2561</option>
+                        <option value="2019">2562</option>
+                        <option value="2020">2563</option>
+                        <option value="2021">2564</option>
+                        <option value="2022">2565</option>
+                        <option value="2023">2566</option>
                     </select>
                     <input onclick="look();" type="button" value=" ตรวจสอบ ">
 

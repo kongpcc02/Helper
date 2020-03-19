@@ -70,7 +70,7 @@
             <tr>
                 <td  align="right" width="30%">วันที่ : </td>
                 <td>
-                    <input id="d" type="text"/>
+                    <input id="d" type="text" autocomplete = "off"/>
                 </td>
             </tr>
             <tr>

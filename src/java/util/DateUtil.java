@@ -36,6 +36,18 @@ public class DateUtil {
         return d;
     }
 
+    public static String convertFormatYear(String d, String formatt) throws ParseException {
+        SimpleDateFormat sdfSource = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = sdfSource.parse(d);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.YEAR, 543);
+        SimpleDateFormat sdfDestination = new SimpleDateFormat(formatt);
+        d = sdfDestination.format(calendar.getTime());
+
+        return d;
+    }
+
     public static String now(String f) {
         Locale.setDefault(new Locale("en", "US"));  //Import java.util.Locale;
         Calendar cal = Calendar.getInstance(Locale.US);
@@ -44,6 +56,42 @@ public class DateUtil {
     }
 
     public static void main(String[] args) throws ParseException {
-        System.out.println(convertFormat("2012-01-05","yyyy-MM-dd", "dd/MM/yyyy"));
+        System.out.println(convertFormat("2012-01-05", "yyyy-MM-dd", "dd/MM/yyyy"));
+    }
+
+    public static String getDateTimeExportReport() {
+        SimpleDateFormat sdf = new SimpleDateFormat("ออกรายงานเมื่อวันที่ dd MMMM yyyy เวลา HH:mm:ss น.", new Locale("th", "TH"));
+        return sdf.format(new Date());
+    }
+
+    public static String getMonthTh(int m) {
+        if (m == 1) {
+            return "มกราคม";
+        } else if (m == 2) {
+            return "กุมภาพันธ์";
+        } else if (m == 3) {
+            return "มีนาคม";
+        } else if (m == 4) {
+            return "เมษายน";
+        } else if (m == 5) {
+            return "พฤษภาคม";
+        } else if (m == 6) {
+            return "มิถุนายน";
+        } else if (m == 7) {
+            return "กรกฎาคม";
+        } else if (m == 8) {
+            return "สิงหาคม";
+        } else if (m == 9) {
+            return "กันยายน";
+        } else if (m == 10) {
+            return "ตุลาคม";
+        } else if (m == 11) {
+            return "พฤศจิกายน";
+        } else if (m == 12) {
+            return "ธันวาคม";
+        } else {
+            return "ไม่มีชื่อเดือนนี้";
+        }
+
     }
 }

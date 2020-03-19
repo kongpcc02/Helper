@@ -49,7 +49,7 @@
         </script>
     </head>
     <body> 
-        <div class="nav"  >โปรแกรม &rarr; P112 นำเข้าข้อมูลสายทางบูรพาวิถี</div>
+        <div class="nav"  >โปรแกรม &rarr; P112 นำเข้าข้อมูลสายทางบูรพาวิถี(ETC)</div>
         <input  type="button" value="กลับหน้าแรก" onclick="history.back()"  >
         <input   type="button" value="ประมวลผล" onclick="process();">
         <input   type="reset" value="ยกเลิก" >

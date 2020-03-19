@@ -28,12 +28,13 @@
                            <!-- <input disabled="disabled"  type="button" value="R101 รายงานรายได้การให้บริการ " onclick=window.location="<%=request.getContextPath() + "/content/Report/R101.jsp"%>">-->
                             <input   type="button" value="P110 สร้างข้อมูลนำเข้า ETC เฉลิมหานครและฉลองรัช " onclick=window.location="<%=request.getContextPath() + "/content/Program/P110.jsp"%>">
                             <input   type="button" value="P111 เปรียบเทียบข้อมูลจาก Gateway" onclick=window.location="<%=request.getContextPath() + "/content/Program/P111.jsp"%>">
-                            <input   type="button" value="P112 นำเข้าข้อมูลสายทางบูรพาวิถี" onclick=window.location="<%=request.getContextPath() + "/content/Program/P112.jsp"%>">
+                            <input   type="button" value="P112 นำเข้าข้อมูลสายทางบูรพาวิถี(ETC)" onclick=window.location="<%=request.getContextPath() + "/content/Program/P112.jsp"%>">
                             <input   type="button" value="P113 อัพเดทข้อมุลจากระบบจัดเก็บ" onclick=window.location="<%=request.getContextPath() + "/content/Program/P113.jsp"%>">
                             <input   type="button" value="P114 แปลงข้อมูลของสายทาง 7,9" onclick=window.location="<%=request.getContextPath() + "/content/Program/P114.jsp"%>">
                             <input   type="button" value="P115 แปลงข้อมูลทางด่วนขั้นที่ 2 ศรีรัช" onclick=window.location="<%=request.getContextPath() + "/content/Program/P115.jsp"%>">
                             <input   type="button" value="P116 นำเข้าข้อมูลการให้บริการและเงินนำส่งธนาคาร(ETC) ศรีรัช-วงแหวน" onclick=window.location="<%=request.getContextPath() + "/content/Program/P116.jsp"%>">
                             <input   type="button" value="P117 ส่งออกข้อมูลรายได้ค่าผ่านทางเงินสด(แยก กทพ.และทล.)ไปยังระบบ SAP" onclick=window.location="<%=request.getContextPath() + "/content/Program/P117.jsp"%>">
+                            <input   type="button" value="P119 โปรแกรมแปลง ETC(โปรโมชั่น)ข้อมูลด่าน 129-1 เป็น 129-2" onclick=window.location="<%=request.getContextPath() + "/content/Program/P119.jsp"%>">
                         </fieldset>
                     </td>
                     <td width="30%" valign="top">
@@ -46,6 +47,10 @@
                     <td width="30%" valign="top">
                         <fieldset> 
                             <input   disabled="disabled" type="button" value="P108 ส่งออกข้อมูล DOC ของทางด่วนศรีรัช ส่วน D" onclick=window.location="<%=request.getContextPath() + "/content/Program/P108.jsp"%>">
+                            
+                            <input type="button" value="R301 รายงานสรุปค่าผ่านทางประเภท EMV ตามยอดนำส่งธนาคาร สายทางกาญจนาภิเษก" onclick=window.location="<%=request.getContextPath() + "/content/Program/R301.jsp"%>">
+                            <input type="button" value="R302 รายงานสรุปค่าผ่านทางประเภท EMV สายทางกาญจนาภิเษก" onclick=window.location="<%=request.getContextPath() + "/content/Program/R302.jsp"%>">
+                            
                         </fieldset>
                     </td>
                 </tr>

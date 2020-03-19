@@ -160,6 +160,18 @@
         <servlet-name>P118Controller</servlet-name>
         <servlet-class>P118.P118Controller</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>P119Controller</servlet-name>
+        <servlet-class>P119.P119Controller</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>R301Controller</servlet-name>
+        <servlet-class>R301.R301Controller</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>R302Controller</servlet-name>
+        <servlet-class>R302.R302Controller</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -319,6 +331,18 @@
     <servlet-mapping>
         <servlet-name>P118Controller</servlet-name>
         <url-pattern>/P118Controller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>P119Controller</servlet-name>
+        <url-pattern>/P119Controller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>R301Controller</servlet-name>
+        <url-pattern>/R301Controller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>R302Controller</servlet-name>
+        <url-pattern>/R302Controller</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

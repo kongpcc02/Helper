@@ -16,34 +16,35 @@
                 $.post("/Helper/Login",
                         {
                             username: $('#user').val(),
-                            password: $('#pass').val()
+                            password: $('#pass').val(),
+                            isSso: false
                         },
-                function(data) {
+                        function (data) {
+                            console.log(data);
+                            if (data == 2) {
+                                alert("ไม่สามารถเข้าสู่ระบบได้");
+                            } else if (data == 9) {
+                                alert("กรอกข้อมูลให้สมบูรณ์ด้วยครับ");
+                            } else if (data == 4) {
+                                alert("รหัสของท่านโดนระงับใช้ชั่วคราว โปรติดต่อ 1303 !!");
+                            } else if (data == 0) {
+                                window.location = '<%=request.getContextPath() + "/content/index.jsp"%>';
+                            } else if (data == -1) {
+                                window.location = '<%=request.getContextPath() + "/content/index.jsp"%>';
 
-                    if (data == 2) {
-                        alert("ไม่สามารถเข้าสู่ระบบได้");
-                    } else if (data == 9) {
-                        alert("กรอกข้อมูลให้สมบูรณ์ด้วยครับ");
-                    } else if (data == 4) {
-                        alert("รหัสของท่านโดนระงับใช้ชั่วคราว โปรติดต่อ 1303 !!");
-                    } else if (data == 0) {
-                        window.location = '<%=request.getContextPath() + "/content/index.jsp"%>';
-                    } else if (data == -1) {
-                        window.location = '<%=request.getContextPath() + "/content/index.jsp"%>';
-
-                    }
-                }
+                            }
+                        }
                 );
             }
 
-            $(function() {
+            $(function () {
                 /*  สามารถเปลี่ยนจาก cardNo_ เป็นค่าที่ต้องการ  */
-                $("#user").keyup(function(event) {
+                $("#user").keyup(function (event) {
                     if (event.keyCode == 13) {
                         $("#pass").focus();
                     }
                 });
-                $("#pass").keyup(function(event) {
+                $("#pass").keyup(function (event) {
                     if (event.keyCode == 13) {
 
                         login();

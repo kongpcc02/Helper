@@ -4,6 +4,7 @@ import Connect.Connector;
 import com.Helper.Helper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,7 +36,7 @@ public class P112Service extends Helper {
                 //fw = new FileWriter("D:\\pluginRVA\\P112\\Tmp\\" + fn.replace(".gw", ".mnl"));
                 //bw = new BufferedWriter(fw);
                 //  while ((sCurrentLine = br.readLine()) != null) {
-                    /*   String[] str = sCurrentLine.split("\t");
+                /*   String[] str = sCurrentLine.split("\t");
                  String stt = str[0];
                  if (stt.equals("403")) {
                  if (str[9].indexOf("1") < 0 && str[9].indexOf("2") < 0 && str[9].indexOf("3") < 0) {//ด่าน 404 
@@ -55,13 +56,13 @@ public class P112Service extends Helper {
                 while ((sCurrentLine = br.readLine()) != null) {
                     String[] str = sCurrentLine.split("\t");
                     String stt = str[0];
-                   /* if (stt.equals("403")) {
+                    /* if (stt.equals("403")) {
                         if (str[9].indexOf("1") < 0 && str[9].indexOf("2") < 0 && str[9].indexOf("3") < 0) {//ด่าน 404 
                             stt = "404";
                         }
                     }*/
                     //if (stt.equals("403") || stt.equals("404")) {
-                      //  System.out.println(stt + " | " + str[9] + " | " + str[11]);
+                    //  System.out.println(stt + " | " + str[9] + " | " + str[11]);
                     //}
                     c.addBatch("INSERT INTO P112_TMP VALUES('" + stt + "','" + str[2] + "','" + str[5] + "','" + str[6] + "','" + str[7] + "','" + str[8] + "','" + str[9] + "','" + str[10] + "','" + str[11] + "','" + str[12] + "','" + str[13] + "','" + str[1] + "','" + str[4] + "','" + str[3] + "')");
                     //   System.out.println("INSERT INTO P112_TMP VALUES('" + str[0] + "','" + str[2] + "','" + str[5] + "','" + str[6] + "','" + str[7] + "','" + str[8] + "','" + str[9] + "','" + str[10] + "','" + str[11] + "','" + str[12] + "','" + str[13] + "','" + str[1] + "','" + str[4] + "','" + str[3] + "')");
@@ -71,7 +72,7 @@ public class P112Service extends Helper {
                 txt.append("<br>--insert cyber into db success--");
                 txt.append("<br>--start creaete mnl file--");
                 // }
-               /* br.close();
+                /* br.close();
                  txt.append("<br>--นำเข้า cyber เรียบร้อย--");
                  bw.close();
                  fw.close();
@@ -86,6 +87,10 @@ public class P112Service extends Helper {
                  }*/
                 BufferedWriter bw = null;
                 FileWriter fw = null;
+                File pathFile = new File("D:\\pluginRVA\\P112\\Tmp\\");
+                if (!pathFile.exists()) {
+                    pathFile.mkdirs();
+                }
                 fw = new FileWriter("D:\\pluginRVA\\P112\\Tmp\\" + fn.replace(".gw", ".mnl"));
                 bw = new BufferedWriter(fw);
 
@@ -100,7 +105,67 @@ public class P112Service extends Helper {
                 bw.close();
                 fw.close();
                 uploadToFTP("D:\\pluginRVA\\P112\\Tmp\\", fn.replace(".gw", ".mnl"));
-                txt.append("<br>--นำเข้า cyber เรียบร้อย--");
+                txt.append("<br>--นำเข้าไฟล์  <b>" + fn.replace(".gw", ".mnl") + "</b>  cyber เรียบร้อย--");
+            }
+            reader.close();
+        } catch (Exception e) {
+            txt.append("<br>--Error --<br>").append(e.getMessage());
+        } finally {
+            c.close();
+            return txt;
+        }
+
+    }
+
+    public StringBuilder importCyber(String fn, String dt, boolean isPromotion) {
+        StringBuilder txt = new StringBuilder();
+        txt.append("<br>---retrive file cyber start...");
+        Connector c = new Connect.Connector();
+        try {
+            InputStream reader = retrieveFromFTP("import/DMS", fn);
+            if (reader == null) {
+                txt.append("<br>--ไม่มีไฟล์จาก (DMS)--");
+                reader = retrieveFromFTP("import/DMS_FOR_TEST", fn);
+            }
+
+            if (reader == null) {
+                txt.append("<br>--ไม่มีการส่งไฟล์--");
+            } else {
+                c.connect();
+                c.executeUpdate("DELETE FROM P112_TMP ");
+                txt.append("<br>--clear ^^--");
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(reader));
+                String sCurrentLine;
+                while ((sCurrentLine = br.readLine()) != null) {
+                    String[] str = sCurrentLine.split("\t");
+                    String stt = str[0];
+                    c.addBatch("INSERT INTO P112_TMP VALUES('" + stt + "','" + str[2] + "','" + str[5] + "','" + str[6] + "','" + str[7] + "','" + str[8] + "','" + str[9] + "','" + str[10] + "','" + str[11] + "','" + str[12] + "','" + str[13] + "','" + str[1] + "','" + str[4] + "','" + str[3] + "')");
+                }
+                c.executeBatch();
+                br.close();
+                txt.append("<br>--insert cyber into db success--");
+                txt.append("<br>--start create txt file--");
+                BufferedWriter bw = null;
+                FileWriter fw = null;
+                File pathFile = new File("D:\\pluginRVA\\P112\\Tmp\\");
+                if (!pathFile.exists()) {
+                    pathFile.mkdirs();
+                }
+                fw = new FileWriter("D:\\pluginRVA\\P112\\Tmp\\" + fn.replace(".pro", ".txt"));
+                bw = new BufferedWriter(fw);
+
+                c.executeQuery("SELECT STT_CODE_EXT,STT_CODE_ENT,'" + dt + "',TOLL_DT,EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER,1,0,SUM(PASS1),0,0 FROM P112_TMP "
+                        + " GROUP BY STT_CODE_EXT,TOLL_DT,STT_CODE_ENT,EMP,SHIF,PASS_TYPE,ISSUER,SERVICE_PROVINDER  ORDER BY STT_CODE_EXT");
+                while (c.getResult().next()) {
+                    bw.write(c.getResult().getString(1) + "\t" + c.getResult().getString(2) + "\t" + c.getResult().getString(3) + "\t" + c.getResult().getString(4) + "\t" + c.getResult().getString(5) + "\t" + c.getResult().getString(6) + "\t" + c.getResult().getString(7) + "\t" + c.getResult().getString(8) + "\t" + c.getResult().getString(9) + "\t" + c.getResult().getString(10) + "\t" + c.getResult().getString(11) + "\t" + c.getResult().getString(12) + "\t" + c.getResult().getString(13) + "\t0\n");
+                }
+
+                br.close();
+                bw.close();
+                fw.close();
+                uploadToFTP("D:\\pluginRVA\\P112\\Tmp\\", fn.replace(".pro", ".txt"));
+                txt.append("<br>--นำเข้าไฟล์(โปรโมชั่นลด 5%)  <b>" + fn.replace(".pro", ".txt") + "</b>  cyber เรียบร้อย--");
             }
             reader.close();
         } catch (Exception e) {
