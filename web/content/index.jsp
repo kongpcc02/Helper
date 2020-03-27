@@ -40,16 +40,17 @@
                     <td width="30%" valign="top">
                         <fieldset> 
                             <input  type="button" value="P107 อัพเดท VAT การขาย =0" onclick=window.location="<%=request.getContextPath() + "/content/Program/P107.jsp"%>">
+                            <input   disabled="disabled" type="button" value="P108 ส่งออกข้อมูล DOC ของทางด่วนศรีรัช ส่วน D" onclick=window.location="<%=request.getContextPath() + "/content/Program/P108.jsp"%>">
                             <input disabled="disabled"   type="button" value="P108 ส่งออกข้อมูลปริมาณจราจรและรายได้" onclick=window.location="<%=request.getContextPath() + "/content/Program/P108.jsp"%>">
                             <input  type="button" value="P201 ลบ Interface" onclick=window.location="<%=request.getContextPath() + "/content/Program/P201.jsp"%>">
                         </fieldset>
                     </td>
                     <td width="30%" valign="top">
                         <fieldset> 
-                            <input   disabled="disabled" type="button" value="P108 ส่งออกข้อมูล DOC ของทางด่วนศรีรัช ส่วน D" onclick=window.location="<%=request.getContextPath() + "/content/Program/P108.jsp"%>">
-                            
+                            <!--<p align="center">สำหรับ แผนกตรวจสอบรายได้3</p>-->
                             <input type="button" value="R301 รายงานสรุปค่าผ่านทางประเภท EMV ตามยอดนำส่งธนาคาร สายทางกาญจนาภิเษก" onclick=window.location="<%=request.getContextPath() + "/content/Program/R301.jsp"%>">
                             <input type="button" value="R302 รายงานสรุปค่าผ่านทางประเภท EMV สายทางกาญจนาภิเษก" onclick=window.location="<%=request.getContextPath() + "/content/Program/R302.jsp"%>">
+                            <input type="button" value="RR204EXATB รายงานปริมาณจราจรและรายได้ค่าผ่านทางแยกตามด่าน แสดงเฉพาะรายได้ กทพ." onclick=window.location="<%=request.getContextPath() + "/content/Program/R204.jsp"%>">
                             
                         </fieldset>
                     </td>

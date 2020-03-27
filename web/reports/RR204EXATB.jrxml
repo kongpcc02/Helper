@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RR204EXAT" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="59334e23-9fea-4362-9b0e-f95b63c18225">
+	<property name="ireport.zoom" value="1.6105100000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#999999" fontName="TH SarabunPSK" fontSize="14">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF" fontName="TH SarabunPSK" fontSize="14">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<paragraph rightIndent="2"/>
+	</style>
+	<style name="text_14" fontName="TH SarabunPSK" fontSize="14"/>
+	<style name="table_TD_1" mode="Opaque" backcolor="#FFFFFF" fontName="TH SarabunPSK" fontSize="14">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="REPORT_PARAM_DSC" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="REPORT_AUDIT_STATUS_FOOTER" class="java.lang.String"/>
+	<parameter name="REPORT_PRINT_BY" class="java.lang.String"/>
+	<field name="STATION_CODE" class="java.lang.String"/>
+	<field name="STATION_DSC" class="java.lang.String"/>
+	<field name="TOT_NUM_TYPE1" class="java.lang.Integer"/>
+	<field name="TOT_NUM_TYPE2" class="java.lang.Integer"/>
+	<field name="TOT_NUM_TYPE3" class="java.lang.Integer"/>
+	<field name="TOT_REV_TYPE1" class="java.lang.Double"/>
+	<field name="TOT_REV_TYPE2" class="java.lang.Double"/>
+	<field name="TOT_REV_TYPE3" class="java.lang.Double"/>
+	<field name="LINE_CODE" class="java.lang.String"/>
+	<field name="LINE_DSC" class="java.lang.String"/>
+	<variable name="SUM_TOT_NUM_TYPE1" class="java.lang.Integer" resetType="Group" resetGroup="LINE_CODE_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOT_NUM_TYPE1}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TOT_NUM_TYPE2" class="java.lang.Integer" resetType="Group" resetGroup="LINE_CODE_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOT_NUM_TYPE2}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TOT_NUM_TYPE3" class="java.lang.Integer" resetType="Group" resetGroup="LINE_CODE_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOT_NUM_TYPE3}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TOT_REV_TYPE1" class="java.lang.Double" resetType="Group" resetGroup="LINE_CODE_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOT_REV_TYPE1}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TOT_REV_TYPE2" class="java.lang.Double" resetType="Group" resetGroup="LINE_CODE_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOT_REV_TYPE2}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TOT_REV_TYPE3" class="java.lang.Double" resetType="Group" resetGroup="LINE_CODE_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOT_REV_TYPE3}]]></variableExpression>
+	</variable>
+	<variable name="TOT_NUM" class="java.lang.Integer" resetType="None">
+		<variableExpression><![CDATA[new Integer($F{TOT_NUM_TYPE1}.intValue()+$F{TOT_NUM_TYPE2}.intValue()+$F{TOT_NUM_TYPE3}.intValue())]]></variableExpression>
+	</variable>
+	<variable name="TOT_REV" class="java.lang.Double">
+		<variableExpression><![CDATA[new Double($F{TOT_REV_TYPE1}.doubleValue()+$F{TOT_REV_TYPE2}.doubleValue()+$F{TOT_REV_TYPE3}.doubleValue())]]></variableExpression>
+	</variable>
+	<variable name="SUM_TOT_NUM" class="java.lang.Integer" resetType="Group" resetGroup="LINE_CODE_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$V{TOT_NUM}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TOT_REV" class="java.lang.Double" resetType="Group" resetGroup="LINE_CODE_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$V{TOT_REV}]]></variableExpression>
+	</variable>
+	<group name="LINE_CODE_GROUP">
+		<groupExpression><![CDATA[$F{LINE_CODE}]]></groupExpression>
+		<groupFooter>
+			<band height="25">
+				<staticText>
+					<reportElement style="table_TD_1" stretchType="RelativeToBandHeight" x="0" y="4" width="122" height="18" uuid="9658b059-b5fd-41a6-8e7d-3025250c58c2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[รวม (ตามทางพิเศษ)]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="LINE_CODE_GROUP" pattern="#,##0">
+					<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="122" y="4" width="77" height="18" uuid="b9731bd5-65ff-43b0-bef1-60ff053e29d9"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="14" isStrikeThrough="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_TOT_NUM_TYPE1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="LINE_CODE_GROUP" pattern="#,##0.00">
+					<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="199" y="4" width="77" height="18" uuid="7962a3c4-e603-400a-97f4-82d07c83bfa3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="14" isStrikeThrough="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_TOT_REV_TYPE1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="LINE_CODE_GROUP" pattern="#,##0.00">
+					<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="353" y="4" width="77" height="18" uuid="a2ec7e17-4a97-4c0a-b6a7-b6c138e89c70"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="14" isStrikeThrough="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_TOT_REV_TYPE2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="LINE_CODE_GROUP" pattern="#,##0">
+					<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="276" y="4" width="77" height="18" uuid="09cc2fcf-233c-463f-9aa9-7ce9dd2454b4"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="14" isStrikeThrough="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_TOT_NUM_TYPE2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="LINE_CODE_GROUP" pattern="#,##0.00">
+					<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="507" y="4" width="77" height="18" uuid="95cf6335-672a-479d-a6d0-2e073aae06a4"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="14" isStrikeThrough="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_TOT_REV_TYPE3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="LINE_CODE_GROUP" pattern="#,##0">
+					<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="430" y="4" width="77" height="18" uuid="c816e937-c9b2-4e87-b969-bbaff183e194"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="14" isStrikeThrough="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_TOT_NUM_TYPE3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="LINE_CODE_GROUP" pattern="#,##0">
+					<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="584" y="4" width="80" height="18" uuid="5f0020d7-a556-47e8-80fe-28e96ae3ca72"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_TOT_NUM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="LINE_CODE_GROUP" pattern="#,##0.00">
+					<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="664" y="4" width="87" height="18" uuid="e7cfb959-bce9-42cc-86ad-c37a1ad9edeb"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+						<font fontName="TH SarabunPSK" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_TOT_REV}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="81">
+			<staticText>
+				<reportElement x="0" y="0" width="97" height="20" uuid="f2eb1c1d-a069-42ac-9680-984fdf1402c7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[RR204EXATB]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="252" y="40" width="226" height="20" uuid="87268f7d-21e5-4af4-8c9f-e40cb8112584"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAM_DSC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="296" y="0" width="142" height="20" uuid="5845d2c4-4538-4fcb-8a75-e59f7da0006b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[การทางพิเศษแห่งประเทศไทย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="209" y="20" width="330" height="20" uuid="a61c6e97-ac82-4c87-9c1b-061228552292"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รายงานปริมาณจราจรและรายได้ค่าผ่านทางแยกตามด่าน แสดงเฉพาะรายได้ กทพ.]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="652" y="0" width="100" height="20" uuid="cad435d0-7b97-4dc9-930a-aa68c2e0b03c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="644" y="20" width="80" height="20" uuid="238e62b6-a5d0-4d5b-a076-e45b0e09535b"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า "+$V{PAGE_NUMBER}+"/"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="724" y="20" width="27" height="20" uuid="1921da67-3837-40ad-8a19-8c48046890b4"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="0" y="60" width="181" height="20" uuid="b2259e3c-7ea6-431f-8341-252391b6d237"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ทางพิเศษ " + $F{LINE_CODE} +" : " +$F{LINE_DSC}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="36">
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="0" y="0" width="122" height="36" uuid="c0ddaca7-2a8a-4324-a643-9fcefba5dcbe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ด่าน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="122" y="0" width="154" height="18" uuid="7f6dbc9e-7f00-448b-9141-1b9594563eac"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ประเภทรถ 4 ล้อ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="122" y="18" width="77" height="18" uuid="9f99218b-0528-4485-8af8-1447fb0955f9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[จำนวนคัน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="199" y="18" width="77" height="18" uuid="0e46f151-c2ed-4358-a434-75720700b204"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[รายได้]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="353" y="18" width="77" height="18" uuid="78503be8-5c76-47f5-b581-9748e18cc0a3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[รายได้]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="276" y="18" width="77" height="18" uuid="bbf5b26f-6e21-4f46-b873-7d33506a3709"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[จำนวนคัน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="276" y="0" width="154" height="18" uuid="cef79b27-e5dc-4d1b-ad07-db8a26ecdaca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ประเภทรถ 6 - 10 ล้อ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="507" y="18" width="77" height="18" uuid="513ead0f-4df8-41f3-8808-6f2fd3b95124"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[รายได้]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="430" y="18" width="77" height="18" uuid="bbd7c7d4-b5c5-4c95-a435-b588a4dda2f0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[จำนวนคัน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="430" y="0" width="154" height="18" uuid="f91d0f37-6dee-4824-a729-f4bc7756083b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ประเภทรถมากกว่า 10 ล้อ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="584" y="0" width="167" height="18" uuid="f68ebcfb-37d8-47d3-ad9c-b509dd4c9714"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[รวม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="664" y="18" width="87" height="18" uuid="6782b197-aa56-498e-a0c3-02b81ef7b2e0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[รายได้]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" x="584" y="18" width="80" height="18" uuid="6064a621-91fc-4c34-9862-4b55b0f027f6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[จำนวนคัน]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="0" y="0" width="122" height="18" isPrintWhenDetailOverflows="true" uuid="721f0100-e663-4c36-8377-627b89205a92"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STATION_CODE} +" : " + $F{STATION_DSC}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0">
+				<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="122" y="0" width="77" height="18" uuid="097ac7c0-f6b1-4a07-9494-35b819af5629"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOT_NUM_TYPE1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0">
+				<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="276" y="0" width="77" height="18" uuid="59095c56-738a-469b-822f-4dcdfaf3dcf1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOT_NUM_TYPE2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0">
+				<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="430" y="0" width="77" height="18" uuid="cd6228a6-92b8-4a91-9eb1-398053ef3b7d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOT_NUM_TYPE3}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0">
+				<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="584" y="0" width="80" height="18" uuid="60ae83c7-4ca0-4e8b-97de-89e90f0012e6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOT_NUM}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="199" y="0" width="77" height="18" uuid="07065798-559c-48a7-bef2-5e2158934920"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOT_REV_TYPE1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="353" y="0" width="77" height="18" uuid="54574ba0-155b-456b-b978-afd9ce49a5c5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOT_REV_TYPE2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="507" y="0" width="77" height="18" uuid="c6c69682-9270-4ac3-8acc-69c9f5aa5a81"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOT_REV_TYPE3}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement style="table_TD" stretchType="RelativeToBandHeight" x="664" y="0" width="87" height="18" uuid="f58fde42-0b30-4828-bf59-0c811ee036ff"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOT_REV}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="18" splitType="Stretch">
+			<textField evaluationTime="Page">
+				<reportElement style="text_14" isPrintRepeatedValues="false" x="0" y="0" width="430" height="18" uuid="102b6632-cd25-45cd-b0e8-2eb69e196090"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_AUDIT_STATUS_FOOTER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Page">
+				<reportElement style="text_14" isPrintRepeatedValues="false" x="430" y="0" width="322" height="18" uuid="4ad5fa80-b0fe-4dba-9483-8000cb52c37c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_PRINT_BY}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
