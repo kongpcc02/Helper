@@ -35,11 +35,11 @@ public class R204ExatService {
         try {
             connector.connectEta();
             String sqlType = "";
-            sqlType = type.equals("all") ? "" : type.equals("etc") ? "AND PAY_TYPE IN ('E', 'Z')" : "AND PAY_TYPE NOT IN ('E', 'Z')";
+            sqlType = type.equals("all") ? "" : type.equals("etc") ? "AND PAY_TYPE IN ('E', 'Z')\n" : "AND PAY_TYPE NOT IN ('E', 'Z')\n";
             String sqlQuery = "SELECT STT.LINE_CODE, STT.LINE_DSC, TOLL.STATION_CODE, STATION_DSC\n"
-                    + "	,	SUM(NUM_TYPE1) AS NUM_TYPE1\n"
-                    + "	,	SUM(NUM_TYPE2) AS NUM_TYPE2\n"
-                    + "	,	SUM(NUM_TYPE3) AS NUM_TYPE3\n"
+                    + "	, SUM(CASE WHEN PASS_ID = 5 THEN 0 ELSE NUM_TYPE1 END) AS NUM_TYPE1\n"
+                    + "	, SUM(CASE WHEN PASS_ID = 5 THEN 0 ELSE NUM_TYPE2 END) AS NUM_TYPE2\n"
+                    + "	, SUM(CASE WHEN PASS_ID = 5 THEN 0 ELSE NUM_TYPE3 END) AS NUM_TYPE3\n"
                     + "	, SUM(CASE WHEN COM_CODE = 'DOH' THEN REV_TYPE1 - COM_REV_TYPE1 ELSE REV_TYPE1 END) AS REV_TYPE1\n"
                     + "	, SUM(CASE WHEN COM_CODE = 'DOH' THEN REV_TYPE2 - COM_REV_TYPE2 ELSE REV_TYPE2 END) AS REV_TYPE2\n"
                     + "	, SUM(CASE WHEN COM_CODE = 'DOH' THEN REV_TYPE3 - COM_REV_TYPE3 ELSE REV_TYPE3 END) AS REV_TYPE3\n"
@@ -60,6 +60,7 @@ public class R204ExatService {
                     + sqlType
                     + "GROUP BY STT.LINE_CODE, STT.LINE_DSC, TOLL.STATION_CODE, STATION_DSC\n"
                     + "ORDER BY TOLL.STATION_CODE ASC";
+            System.out.println(sqlQuery);
             ResultSet resultSet = connector.executeQuery(sqlQuery);
             while (resultSet.next()) {
                 Report204Model reportModel = new Report204Model();
