@@ -23,6 +23,8 @@
                             console.log(data);
                             if (data == 2) {
                                 alert("ไม่สามารถเข้าสู่ระบบได้");
+                            } else if (data == 3) {
+                                alert("ไม่มีสิทธิเข้าใช้ระบบ");
                             } else if (data == 9) {
                                 alert("กรอกข้อมูลให้สมบูรณ์ด้วยครับ");
                             } else if (data == 4) {

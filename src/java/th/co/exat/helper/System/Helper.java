@@ -89,7 +89,7 @@ public class Helper {
         try {
             s = new Helper();
 
-            s.Login("1520055252", "01102529");
+            s.Login("1220003216", "01102529");
             System.out.println(s.getLoginResult());
             System.out.println(s.loginStatus);
             System.out.println(s.userDept);
