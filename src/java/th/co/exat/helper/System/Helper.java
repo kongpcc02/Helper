@@ -14,7 +14,7 @@ import java.net.*;
  */
 public class Helper {
 
-    private String systemCode = "RVA";
+    private String systemCode = "HLP";
     private String username;
     private String userDept;
     private int loginStatus;
