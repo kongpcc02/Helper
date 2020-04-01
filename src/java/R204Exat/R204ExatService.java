@@ -13,8 +13,10 @@ import java.io.InputStream;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -123,6 +125,7 @@ public class R204ExatService {
         mapParam.put("REPORT_PARAM_DSC", reportParamDsc);
         mapParam.put("REPORT_AUDIT_STATUS_FOOTER", getAuditStatus(startDate, endDate, deptName));
         mapParam.put("REPORT_PRINT_BY", "จัดพิมพ์โดย " + uid + " " + deptName);
+        mapParam.put(JRParameter.REPORT_LOCALE, new Locale("th", "TH"));
         JasperPrint jasperPrint = JasperFillManager.fillReport(report, mapParam, new JRBeanCollectionDataSource(r204ModelList));
         JasperExportManager.exportReportToPdfFile(jasperPrint, exportPath + "/" + fileName + ".pdf");
     }
