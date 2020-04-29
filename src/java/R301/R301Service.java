@@ -330,6 +330,7 @@ public class R301Service {
             s.addCell(new Label(8, 6, "รวม", txtCentreDetail));
             s.addCell(new Label(9, 5, "รวม", txtHeader5));
             s.mergeCells(9, 5, 9, 6);
+            System.out.println(sqlQueryData);
             ResultSet resultData = connector.executeQuery(sqlQueryData);
             int rowNum = 7;
             while (resultData.next()) {
