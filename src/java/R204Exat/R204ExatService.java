@@ -62,8 +62,8 @@ public class R204ExatService {
                     + sqlType
                     + "GROUP BY STT.LINE_CODE, STT.LINE_DSC, TOLL.STATION_CODE, STATION_DSC\n"
                     + "ORDER BY TOLL.STATION_CODE ASC";
-            System.out.println(sqlQuery);
             ResultSet resultSet = connector.executeQuery(sqlQuery);
+            ResultSet resultETC, resultMTC = null;
             while (resultSet.next()) {
                 Report204Model reportModel = new Report204Model();
                 reportModel.setLINE_CODE(resultSet.getString("LINE_CODE"));
@@ -78,8 +78,40 @@ public class R204ExatService {
                 reportModel.setTOT_REV_TYPE3(resultSet.getDouble("REV_TYPE3"));
                 r204ModelList.add(reportModel);
             }
+            if (type.equals("all")) {
+                resultETC = getTrfDohOnlyETC(startDate, endDate, connector);
+                resultMTC = getTrfDohOnlyMTC(startDate, endDate, connector);
+            }
+            if (type.equals("etc")) {
+                resultETC = getTrfDohOnlyETC(startDate, endDate, connector);
+            }
+            if (type.equals("mtc")) {
+                resultMTC = getTrfDohOnlyMTC(startDate, endDate, connector);
+            }
+            if (resultMTC.next()) {
+                System.out.println(resultMTC.getString("station_code"));
+            }
+//            while (resultETC.next()) {
+//                for (Report204Model reportModel : r204ModelList) {
+//                    if (resultETC.getString("station_cde").equals(reportModel.getSTATION_CODE())) {
+//                        reportModel.setTOT_NUM_TYPE1(reportModel.getTOT_NUM_TYPE1() - resultETC.getInt("NUM_TYPE1"));
+//                        reportModel.setTOT_NUM_TYPE2(reportModel.getTOT_NUM_TYPE2() - resultETC.getInt("NUM_TYPE2"));
+//                        reportModel.setTOT_NUM_TYPE3(reportModel.getTOT_NUM_TYPE3() - resultETC.getInt("NUM_TYPE3"));
+//                    }
+//                }
+//            }
+//            while (resultMTC.next()) {
+//                for (Report204Model reportModel : r204ModelList) {
+//                    if (resultMTC.getString("station_cde").equals(reportModel.getSTATION_CODE())) {
+//                        reportModel.setTOT_NUM_TYPE1(reportModel.getTOT_NUM_TYPE1() - resultMTC.getInt("NUM_TYPE1"));
+//                        reportModel.setTOT_NUM_TYPE2(reportModel.getTOT_NUM_TYPE2() - resultMTC.getInt("NUM_TYPE2"));
+//                        reportModel.setTOT_NUM_TYPE3(reportModel.getTOT_NUM_TYPE3() - resultMTC.getInt("NUM_TYPE3"));
+//                    }
+//                }
+//            }
             return r204ModelList;
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new Exception(ex);
         } finally {
             connector.close();
@@ -112,8 +144,10 @@ public class R204ExatService {
         File reportFile = null;
         File jasperFile = null;
         JasperReport report = null;
-        String uid = request.getSession().getAttribute("ssion_userid").toString();
-        String deptName = request.getSession().getAttribute("ssion_deptname").toString();
+//        String uid = request.getSession().getAttribute("ssion_userid").toString();
+//        String deptName = request.getSession().getAttribute("ssion_deptname").toString();
+        String uid = "sss";
+        String deptName = "ssss";
         reportFile = new File(rootPath + fileName + ".jrxml");
         jasperFile = new File(rootPath + fileName + ".jasper");
         try {
@@ -146,7 +180,7 @@ public class R204ExatService {
                     + "and PERIOD_STATUS = 'O'";
             ResultSet resultSet = connector.executeQuery(sqlQuery);
             if (resultSet.next()) {
-                auditStatus += (resultSet.getInt("count_status") > 0 ? "ยังไม่การตรวจสอบจาก" : "ผ่านการตรวจสอบจาก") + deptName;
+                auditStatus += (resultSet.getInt("count_status") > 0 ? "ยังไม่ผ่านการตรวจสอบจาก" : "ผ่านการตรวจสอบจาก") + deptName;
             }
         } catch (Exception ex) {
             throw new Exception(ex);
@@ -154,6 +188,118 @@ public class R204ExatService {
             connector.close();
         }
         return auditStatus;
+    }
+
+    private ResultSet getTrfDohOnlyMTC(String startDate, String endDate, Connector connector) throws Exception {
+        String sqlQuery = "select station_code\n"
+                + ", sum(NUM_TYPE1) as NUM_TYPE1\n"
+                + ", sum(NUM_TYPE2) as NUM_TYPE2\n"
+                + ", sum(NUM_TYPE3) as NUM_TYPE3\n"
+                + "from (\n"
+                + "	select TRF.EXT_STT_CODE as station_code\n"
+                + "	, sum(TRF_TYPE1 + TRF_TYPE2) as NUM_TYPE1\n"
+                + "	, sum(TRF_TYPE3 + TRF_TYPE6 + TRF_TYPE7 + TRF_TYPE8) as NUM_TYPE2\n"
+                + "	, sum(TRF_TYPE4) as NUM_TYPE3\n"
+                + "	from (\n"
+                + "		select EXT_STT_CODE, ENT_STT_CODE\n"
+                + "		from RVA_MST_CHRG_CLS\n"
+                + "		where END_DATE > sysdate\n"
+                + "		and EXT_STT_CODE like '6%'\n"
+                + "		and COM_CODE = 'DOH'\n"
+                + "		and (CHRG_REV_4W  - COM_REV_4W ) = 0\n"
+                + "		GROUP BY EXT_STT_CODE, ENT_STT_CODE \n"
+                + "	) chrg \n"
+                + "	LEFT JOIN RVA_TRX_TRF_CLS trf on CHRG.EXT_STT_CODE = trf.EXT_STT_CODE and CHRG.ENT_STT_CODE = trf.ENT_STT_CODE\n"
+                + "	where TRX_DATE BETWEEN TO_DATE('" + startDate + "', 'dd/MM/yyyy') AND TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n"
+                + "     and AUDIT_STATUS = 'Y'\n"
+                + "	group by TRF.EXT_STT_CODE\n"
+                + "\n"
+                + "	union ALL\n"
+                + "	select UAP.EXT_STT_CODE as station_code\n"
+                + "	, sum(NUAP_TYPE1) as NUM_TYPE1\n"
+                + "	, sum(NUAP_TYPE2) as NUM_TYPE2\n"
+                + "	, sum(NUAP_TYPE3) as NUM_TYPE3\n"
+                + "	from (\n"
+                + "		select EXT_STT_CODE, ENT_STT_CODE\n"
+                + "		from RVA_MST_CHRG_CLS\n"
+                + "		where END_DATE > sysdate\n"
+                + "		and EXT_STT_CODE like '6%'\n"
+                + "		and COM_CODE = 'DOH'\n"
+                + "		and (CHRG_REV_4W  - COM_REV_4W ) = 0\n"
+                + "		GROUP BY EXT_STT_CODE, ENT_STT_CODE \n"
+                + "	) chrg \n"
+                + "	LEFT JOIN RVA_TRX_UAP_CLS uap on CHRG.EXT_STT_CODE = uap.EXT_STT_CODE and CHRG.ENT_STT_CODE = uap.ENT_STT_CODE\n"
+                + "	where TRX_DATE BETWEEN TO_DATE('" + startDate + "', 'dd/MM/yyyy') AND TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n"
+                + "     and AUDIT_STATUS = 'Y'\n"
+                + "	group by UAP.EXT_STT_CODE\n"
+                + "\n"
+                + "	UNION ALL\n"
+                + "	select adj.EXT_STT_CODE\n"
+                + "	, sum(ADJ_NUM_TYPE1) as NUM_TYPE1\n"
+                + "	, sum(ADJ_NUM_TYPE2) as NUM_TYPE2\n"
+                + "	, sum(ADJ_NUM_TYPE3) as NUM_TYPE3\n"
+                + "	from (\n"
+                + "		select EXT_STT_CODE, ENT_STT_CODE\n"
+                + "		from RVA_MST_CHRG_CLS\n"
+                + "		where END_DATE > sysdate\n"
+                + "		and EXT_STT_CODE like '6%'\n"
+                + "		and COM_CODE = 'DOH'\n"
+                + "		and (CHRG_REV_4W  - COM_REV_4W ) = 0\n"
+                + "		GROUP BY EXT_STT_CODE, ENT_STT_CODE \n"
+                + "	) chrg \n"
+                + "	LEFT JOIN RVA_TRX_REV_ADJ_CLS adj on CHRG.EXT_STT_CODE = adj.EXT_STT_CODE and CHRG.ENT_STT_CODE = adj.ENT_STT_CODE\n"
+                + "	where TRX_DATE BETWEEN TO_DATE('" + startDate + "', 'dd/MM/yyyy') AND TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n"
+                + "     and AUDIT_STATUS = 'Y'\n"
+                + "	group by adj.EXT_STT_CODE\n"
+                + ")\n"
+                + "group by station_code";
+        try {
+            connector.connectEta();
+            ResultSet resultSet = connector.executeQuery(sqlQuery);
+            return resultSet;
+        } finally {
+//            connector.close();
+        }
+
+    }
+
+    private ResultSet getTrfDohOnlyETC(String startDate, String endDate, Connector connector) throws Exception {
+        String sqlQuery = "select trf.EXT_STT_CODE as station_code\n"
+                + ",	sum(trf.PASS_CNT1) as NUM_TYPE1\n"
+                + ", sum(trf.PASS_CNT2) as NUM_TYPE2\n"
+                + ", sum(trf.PASS_CNT3) as NUM_TYPE3\n"
+                + "from (\n"
+                + "		select EXT_STT_CODE, ENT_STT_CODE\n"
+                + "		from RVA_MST_CHRG_CLS\n"
+                + "		where END_DATE > sysdate\n"
+                + "		and EXT_STT_CODE like '6%'\n"
+                + "		and COM_CODE = 'DOH'\n"
+                + "		and (CHRG_REV_4W  - COM_REV_4W ) = 0\n"
+                + "		GROUP BY EXT_STT_CODE, ENT_STT_CODE \n"
+                + ") chrg \n"
+                + "INNER JOIN (\n"
+                + "	select EXT_STT_CODE, ENT_STT_CODE, PASS_CNT1, PASS_CNT2, PASS_CNT3\n"
+                + "	from RVA_TRX_ETC_CLS cls\n"
+                + "	INNER join RVA_TRX_ETC_CLS_TRF trf on trf.CLS_ID = cls.CLS_ID\n"
+                + "	where TRX_DATE BETWEEN TO_DATE('" + startDate + "', 'dd/MM/yyyy') AND TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n"
+                + "	and AUDIT_STATUS = 'Y'\n"
+                + "\n"
+                + "	UNION ALL\n"
+                + "	select EXT_STT_CODE, ENT_STT_CODE, PASS_CNT1, PASS_CNT2, PASS_CNT3\n"
+                + "	from RVA_TRX_ETC_CLS cls\n"
+                + "	INNER join RVA_TRX_ETC_CLS_TRF_ADJ adj on adj.CLS_ID = cls.CLS_ID\n"
+                + "	where TRX_DATE BETWEEN TO_DATE('" + startDate + "', 'dd/MM/yyyy') AND TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n"
+                + "	and AUDIT_STATUS = 'Y'\n"
+                + "\n"
+                + ") trf on CHRG.EXT_STT_CODE = trf.EXT_STT_CODE and CHRG.ENT_STT_CODE = trf.ENT_STT_CODE\n"
+                + "group by trf.EXT_STT_CODE";
+        try {
+            connector.connectEta();
+            ResultSet resultSet = connector.executeQuery(sqlQuery);
+            return resultSet;
+        } finally {
+//            connector.close();
+        }
     }
 
     public static void main(String[] args) {
