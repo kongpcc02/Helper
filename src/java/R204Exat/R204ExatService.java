@@ -63,7 +63,7 @@ public class R204ExatService {
                     + "GROUP BY STT.LINE_CODE, STT.LINE_DSC, TOLL.STATION_CODE, STATION_DSC\n"
                     + "ORDER BY TOLL.STATION_CODE ASC";
             ResultSet resultSet = connector.executeQuery(sqlQuery);
-            ResultSet resultETC, resultMTC = null;
+            ResultSet resultETC  = null, resultMTC = null;
             while (resultSet.next()) {
                 Report204Model reportModel = new Report204Model();
                 reportModel.setLINE_CODE(resultSet.getString("LINE_CODE"));
@@ -88,9 +88,10 @@ public class R204ExatService {
             if (type.equals("mtc")) {
                 resultMTC = getTrfDohOnlyMTC(startDate, endDate, connector);
             }
-            if (resultMTC.next()) {
-                System.out.println(resultMTC.getString("station_code"));
-            }
+//            if (resultMTC.next()) {
+//                System.out.println(resultMTC.getString("station_code"));
+//            }
+                
 //            while (resultETC.next()) {
 //                for (Report204Model reportModel : r204ModelList) {
 //                    if (resultETC.getString("station_cde").equals(reportModel.getSTATION_CODE())) {
