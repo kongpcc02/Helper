@@ -176,6 +176,14 @@
         <servlet-name>R204Controller</servlet-name>
         <servlet-class>R204Exat.R204Controller</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>R301AController</servlet-name>
+        <servlet-class>R301A.R301AController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>R302AController</servlet-name>
+        <servlet-class>R302A.R302AController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -351,6 +359,14 @@
     <servlet-mapping>
         <servlet-name>R204Controller</servlet-name>
         <url-pattern>/R204Controller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>R301AController</servlet-name>
+        <url-pattern>/R301AController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>R302AController</servlet-name>
+        <url-pattern>/R302AController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
