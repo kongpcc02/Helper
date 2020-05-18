@@ -116,7 +116,7 @@ public class R302AService {
         File fileReport = new File(this.p + "/รายงานสรุปรายได้ค่าผ่านทาง EMV " + fd + ".xls");
         WritableWorkbook workbook = Workbook.createWorkbook(fileReport);
         WritableSheet shtSummary = workbook.createSheet("รายงานสรุปรายได้ค่าผ่านทาง EMV.", 0);
-        writeCoverHead(shtSummary, "รายงานสรุปรายได้ค่าผ่านทาง EMV. ตามยอดนำส่งธนาคาร ทางพิเศษ" + this.lineDsc);
+        writeCoverHead(shtSummary, "รายงานสรุปรายได้ค่าผ่านทาง EMV. ทางพิเศษ" + this.lineDsc);
         writeDataSummary(shtSummary, request.getParameter("date"), lineCode);
         workbook.write();
         workbook.close();
