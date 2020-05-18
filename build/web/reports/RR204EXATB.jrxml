@@ -23,6 +23,10 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 		<paragraph rightIndent="2"/>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{TOT_NUM_TYPE1} < 0 || $F{TOT_NUM_TYPE2} < 0 || $F{TOT_NUM_TYPE3} < 0 || $F{TOT_REV_TYPE1} < 0 || $F{TOT_REV_TYPE2} < 0 || $F{TOT_REV_TYPE3} < 0]]></conditionExpression>
+			<style fill="Solid" pattern="###0.00;(###0.00)"/>
+		</conditionalStyle>
 	</style>
 	<style name="text_14" fontName="TH SarabunPSK" fontSize="14"/>
 	<style name="table_TD_1" mode="Opaque" backcolor="#FFFFFF" fontName="TH SarabunPSK" fontSize="14">

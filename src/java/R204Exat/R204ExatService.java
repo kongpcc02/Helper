@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -62,8 +63,10 @@ public class R204ExatService {
                     + sqlType
                     + "GROUP BY STT.LINE_CODE, STT.LINE_DSC, TOLL.STATION_CODE, STATION_DSC\n"
                     + "ORDER BY TOLL.STATION_CODE ASC";
+//            System.out.println(sqlQuery);
+//            System.out.println("------------------------------------------");
             ResultSet resultSet = connector.executeQuery(sqlQuery);
-            ResultSet resultETC  = null, resultMTC = null;
+            ResultSet resultETC = null, resultMTC = null;
             while (resultSet.next()) {
                 Report204Model reportModel = new Report204Model();
                 reportModel.setLINE_CODE(resultSet.getString("LINE_CODE"));
@@ -91,25 +94,25 @@ public class R204ExatService {
 //            if (resultMTC.next()) {
 //                System.out.println(resultMTC.getString("station_code"));
 //            }
-                
-//            while (resultETC.next()) {
-//                for (Report204Model reportModel : r204ModelList) {
-//                    if (resultETC.getString("station_cde").equals(reportModel.getSTATION_CODE())) {
-//                        reportModel.setTOT_NUM_TYPE1(reportModel.getTOT_NUM_TYPE1() - resultETC.getInt("NUM_TYPE1"));
-//                        reportModel.setTOT_NUM_TYPE2(reportModel.getTOT_NUM_TYPE2() - resultETC.getInt("NUM_TYPE2"));
-//                        reportModel.setTOT_NUM_TYPE3(reportModel.getTOT_NUM_TYPE3() - resultETC.getInt("NUM_TYPE3"));
-//                    }
-//                }
-//            }
-//            while (resultMTC.next()) {
-//                for (Report204Model reportModel : r204ModelList) {
-//                    if (resultMTC.getString("station_cde").equals(reportModel.getSTATION_CODE())) {
-//                        reportModel.setTOT_NUM_TYPE1(reportModel.getTOT_NUM_TYPE1() - resultMTC.getInt("NUM_TYPE1"));
-//                        reportModel.setTOT_NUM_TYPE2(reportModel.getTOT_NUM_TYPE2() - resultMTC.getInt("NUM_TYPE2"));
-//                        reportModel.setTOT_NUM_TYPE3(reportModel.getTOT_NUM_TYPE3() - resultMTC.getInt("NUM_TYPE3"));
-//                    }
-//                }
-//            }
+
+            while (resultETC != null && resultETC.next()) {
+                for (Report204Model reportModel : r204ModelList) {
+                    if (resultETC.getString("station_code").equals(reportModel.getSTATION_CODE())) {
+                        reportModel.setTOT_NUM_TYPE1(reportModel.getTOT_NUM_TYPE1() - resultETC.getInt("NUM_TYPE1"));
+                        reportModel.setTOT_NUM_TYPE2(reportModel.getTOT_NUM_TYPE2() - resultETC.getInt("NUM_TYPE2"));
+                        reportModel.setTOT_NUM_TYPE3(reportModel.getTOT_NUM_TYPE3() - resultETC.getInt("NUM_TYPE3"));
+                    }
+                }
+            }
+            while (resultMTC != null && resultMTC.next()) {
+                for (Report204Model reportModel : r204ModelList) {
+                    if (resultMTC.getString("station_code").equals(reportModel.getSTATION_CODE())) {
+                        reportModel.setTOT_NUM_TYPE1(reportModel.getTOT_NUM_TYPE1() - resultMTC.getInt("NUM_TYPE1"));
+                        reportModel.setTOT_NUM_TYPE2(reportModel.getTOT_NUM_TYPE2() - resultMTC.getInt("NUM_TYPE2"));
+                        reportModel.setTOT_NUM_TYPE3(reportModel.getTOT_NUM_TYPE3() - resultMTC.getInt("NUM_TYPE3"));
+                    }
+                }
+            }
             return r204ModelList;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -123,7 +126,11 @@ public class R204ExatService {
         String startDate = request.getParameter("dateFrom");
         String endDate = request.getParameter("dateTo");
         String type = request.getParameter("type");
-        String reportParamDsc = startDate.equals(endDate) ? "วันที่ " + startDate : "วันที่ " + startDate + " ถึง " + endDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdfThai = new SimpleDateFormat("dd/MM/yyyy", new Locale("th", "TH"));
+        String startDateThai = sdfThai.format(sdf.parse(startDate));
+        String endDateThai = sdfThai.format(sdf.parse(endDate));
+        String reportParamDsc = startDate.equals(endDate) ? "วันที่ " + startDateThai : "วันที่ " + startDateThai + " ถึง " + endDateThai;
         if (type.equals("all")) {
             reportParamDsc += " (MTC/ETC)";
         }
@@ -145,10 +152,10 @@ public class R204ExatService {
         File reportFile = null;
         File jasperFile = null;
         JasperReport report = null;
-//        String uid = request.getSession().getAttribute("ssion_userid").toString();
-//        String deptName = request.getSession().getAttribute("ssion_deptname").toString();
-        String uid = "sss";
-        String deptName = "ssss";
+        String uid = request.getSession().getAttribute("ssion_userid").toString();
+        String deptName = request.getSession().getAttribute("ssion_deptname").toString();
+//        String uid = "sss";
+//        String deptName = "ssss";
         reportFile = new File(rootPath + fileName + ".jrxml");
         jasperFile = new File(rootPath + fileName + ".jasper");
         try {
@@ -208,6 +215,7 @@ public class R204ExatService {
                 + "		and EXT_STT_CODE like '6%'\n"
                 + "		and COM_CODE = 'DOH'\n"
                 + "		and (CHRG_REV_4W  - COM_REV_4W ) = 0\n"
+                + "             and (START_DATE < TO_DATE('" + startDate + "', 'dd/MM/yyyy') OR START_DATE <  TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n)"
                 + "		GROUP BY EXT_STT_CODE, ENT_STT_CODE \n"
                 + "	) chrg \n"
                 + "	LEFT JOIN RVA_TRX_TRF_CLS trf on CHRG.EXT_STT_CODE = trf.EXT_STT_CODE and CHRG.ENT_STT_CODE = trf.ENT_STT_CODE\n"
@@ -227,6 +235,7 @@ public class R204ExatService {
                 + "		and EXT_STT_CODE like '6%'\n"
                 + "		and COM_CODE = 'DOH'\n"
                 + "		and (CHRG_REV_4W  - COM_REV_4W ) = 0\n"
+                + "             and (START_DATE < TO_DATE('" + startDate + "', 'dd/MM/yyyy') OR START_DATE <  TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n)"
                 + "		GROUP BY EXT_STT_CODE, ENT_STT_CODE \n"
                 + "	) chrg \n"
                 + "	LEFT JOIN RVA_TRX_UAP_CLS uap on CHRG.EXT_STT_CODE = uap.EXT_STT_CODE and CHRG.ENT_STT_CODE = uap.ENT_STT_CODE\n"
@@ -246,6 +255,7 @@ public class R204ExatService {
                 + "		and EXT_STT_CODE like '6%'\n"
                 + "		and COM_CODE = 'DOH'\n"
                 + "		and (CHRG_REV_4W  - COM_REV_4W ) = 0\n"
+                + "             and (START_DATE < TO_DATE('" + startDate + "', 'dd/MM/yyyy') OR START_DATE <  TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n)"
                 + "		GROUP BY EXT_STT_CODE, ENT_STT_CODE \n"
                 + "	) chrg \n"
                 + "	LEFT JOIN RVA_TRX_REV_ADJ_CLS adj on CHRG.EXT_STT_CODE = adj.EXT_STT_CODE and CHRG.ENT_STT_CODE = adj.ENT_STT_CODE\n"
@@ -255,7 +265,7 @@ public class R204ExatService {
                 + ")\n"
                 + "group by station_code";
         try {
-            connector.connectEta();
+//            connector.connectEta();
             ResultSet resultSet = connector.executeQuery(sqlQuery);
             return resultSet;
         } finally {
@@ -276,6 +286,7 @@ public class R204ExatService {
                 + "		and EXT_STT_CODE like '6%'\n"
                 + "		and COM_CODE = 'DOH'\n"
                 + "		and (CHRG_REV_4W  - COM_REV_4W ) = 0\n"
+                + "             and (START_DATE < TO_DATE('" + startDate + "', 'dd/MM/yyyy') OR START_DATE <  TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n)"
                 + "		GROUP BY EXT_STT_CODE, ENT_STT_CODE \n"
                 + ") chrg \n"
                 + "INNER JOIN (\n"
@@ -284,6 +295,7 @@ public class R204ExatService {
                 + "	INNER join RVA_TRX_ETC_CLS_TRF trf on trf.CLS_ID = cls.CLS_ID\n"
                 + "	where TRX_DATE BETWEEN TO_DATE('" + startDate + "', 'dd/MM/yyyy') AND TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n"
                 + "	and AUDIT_STATUS = 'Y'\n"
+                + "     and PASS_ID <> 5\n"
                 + "\n"
                 + "	UNION ALL\n"
                 + "	select EXT_STT_CODE, ENT_STT_CODE, PASS_CNT1, PASS_CNT2, PASS_CNT3\n"
@@ -291,11 +303,20 @@ public class R204ExatService {
                 + "	INNER join RVA_TRX_ETC_CLS_TRF_ADJ adj on adj.CLS_ID = cls.CLS_ID\n"
                 + "	where TRX_DATE BETWEEN TO_DATE('" + startDate + "', 'dd/MM/yyyy') AND TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n"
                 + "	and AUDIT_STATUS = 'Y'\n"
+                + "     and PASS_ID <> 5\n"
+                + "\n"
+                + "	UNION ALL\n"
+                + "	select EXT_STT_CODE, ENT_STT_CODE, (-1 * PASS_CNT1), PASS_CNT2, PASS_CNT3\n"
+                + "	from RVA_TRX_ETC_CLS cls\n"
+                + "	INNER join RVA_TRX_ETC_CLS_TRF_L0 L0 on L0.CLS_ID = cls.CLS_ID\n"
+                + "	where TRX_DATE BETWEEN TO_DATE('" + startDate + "', 'dd/MM/yyyy') AND TO_DATE('" + endDate + "', 'dd/MM/yyyy')\n"
+                + "	and AUDIT_STATUS = 'Y'\n"
+                + "	and PASS_ID <> 5\n"
                 + "\n"
                 + ") trf on CHRG.EXT_STT_CODE = trf.EXT_STT_CODE and CHRG.ENT_STT_CODE = trf.ENT_STT_CODE\n"
                 + "group by trf.EXT_STT_CODE";
         try {
-            connector.connectEta();
+//            connector.connectEta();
             ResultSet resultSet = connector.executeQuery(sqlQuery);
             return resultSet;
         } finally {
