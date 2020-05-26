@@ -49,9 +49,10 @@
                         <fieldset> 
                             <!--<p align="center">สำหรับ แผนกตรวจสอบรายได้3</p>-->
                             <input type="button" value="R301 รายงานสรุปค่าผ่านทางประเภท EMV ตามยอดนำส่งธนาคาร สายทางกาญจนาภิเษก" onclick=window.location="<%=request.getContextPath() + "/content/Program/R301.jsp"%>">
-                            <input type="button" value="R301A รายงานสรุปค่าผ่านทางประเภท EMV ตามยอดนำส่งธนาคาร" onclick=window.location="<%=request.getContextPath() + "/content/Program/R301A.jsp"%>">
+                            <!--<input type="button" value="R301A รายงานสรุปค่าผ่านทางประเภท EMV ตามยอดนำส่งธนาคาร" onclick=window.location="<%=request.getContextPath() + "/content/Program/R301A.jsp"%>">-->
                             <input type="button" value="R302 รายงานสรุปค่าผ่านทางประเภท EMV สายทางกาญจนาภิเษก" onclick=window.location="<%=request.getContextPath() + "/content/Program/R302.jsp"%>">
-                            <input type="button" value="R302A รายงานสรุปค่าผ่านทางประเภท EMV" onclick=window.location="<%=request.getContextPath() + "/content/Program/R302A.jsp"%>">
+                            <input type="button" value="R303 รายงานสรุปค่าผ่านทางประเภท EMV" onclick=window.location="<%=request.getContextPath() + "/content/Program/R303.jsp"%>">
+                            <!--<input type="button" value="R302A รายงานสรุปค่าผ่านทางประเภท EMV" onclick=window.location="<%=request.getContextPath() + "/content/Program/R302A.jsp"%>">-->
                             <input type="button" value="RR204EXATB รายงานปริมาณจราจรและรายได้ค่าผ่านทางแยกตามด่าน แสดงเฉพาะรายได้ กทพ." onclick=window.location="<%=request.getContextPath() + "/content/Program/R204.jsp"%>">
                             
                         </fieldset>

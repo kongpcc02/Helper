@@ -184,6 +184,10 @@
         <servlet-name>R302AController</servlet-name>
         <servlet-class>R302A.R302AController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>R303Controller</servlet-name>
+        <servlet-class>R303.R303Controller</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -367,6 +371,10 @@
     <servlet-mapping>
         <servlet-name>R302AController</servlet-name>
         <url-pattern>/R302AController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>R303Controller</servlet-name>
+        <url-pattern>/R303Controller</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
