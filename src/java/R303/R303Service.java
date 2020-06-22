@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import jxl.CellView;
 import jxl.Workbook;
@@ -105,25 +106,41 @@ public class R303Service {
         fmtCenter.setAlignment(Alignment.CENTRE);
         fmtCenter.setFont(font);
         this.p = request.getRealPath("/export/report/");
-        this.fd = util.DateUtil.convertFormat(request.getParameter("date"), "yyyy-MM-dd");
-        this.fdLocalFmt = request.getParameter("date");
+        String fromDate = request.getParameter("date");
+        String toDate = request.getParameter("toDate");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        Date trxFromDate = sdf.parse(fromDate);
+        Date trxToDate = sdf.parse(toDate);
+        Calendar calendarDate = Calendar.getInstance();
+        calendarDate.setTime(trxFromDate);
+
+        this.fd = util.DateUtil.convertFormat(fromDate, "yyyy-MM-dd");
+        this.fdLocalFmt = fromDate;
         if (!(new File(this.p)).exists()) {
             (new File(this.p)).mkdirs();
         }
         String lineCode = request.getParameter("lineCode");
         this.lineDsc = getLineDsc(lineCode);
         this.lineType = getLineType(lineCode);
-        File fileReport = new File(this.p + "/รายงานสรุปรายได้ค่าผ่านทาง EMV ทางพิเศษ" + this.lineDsc + " " + fd + ".xls");
+        File fileReport = new File(this.p + "/รายงานสรุปรายได้ค่าผ่านทาง EMV ทางพิเศษ" + this.lineDsc + " " + fd + " ถึง " + util.DateUtil.convertFormat(toDate, "yyyy-MM-dd") + ".xls");
         WritableWorkbook workbook = Workbook.createWorkbook(fileReport);
-        WritableSheet shtSummary = workbook.createSheet("รายงานสรุปรายได้ค่าผ่านทาง EMV.", 0);
-        writeCoverHead(shtSummary, "รายงานสรุปรายได้ค่าผ่านทาง EMV. ทางพิเศษ" + this.lineDsc);
-        writeDataSummary(shtSummary, request.getParameter("date"), lineCode);
+        int index = 0;
+        String trxDate = "";
+        WritableSheet shtSummary = null;
+        while (calendarDate.getTime().equals(trxToDate) || calendarDate.getTime().before(trxToDate)) {
+            trxDate = sdf.format(calendarDate.getTime());
+            shtSummary = workbook.createSheet("วันที่ " + util.DateUtil.convertFormat(trxDate, "dd-MM-yyyy"), index);
+            writeCoverHead(shtSummary, "รายงานสรุปรายได้ค่าผ่านทาง EMV. ทางพิเศษ" + this.lineDsc, trxDate);
+            writeDataSummary(shtSummary, trxDate, lineCode);
+            calendarDate.add(Calendar.DATE, 1);
+            index++;
+        }
         workbook.write();
         workbook.close();
         return fileReport.getName();
     }
 
-    public void writeCoverHead(WritableSheet s, String headName) throws WriteException, Exception {
+    public void writeCoverHead(WritableSheet s, String headName, String date) throws WriteException, Exception {
         CellView c = new CellView();
         c.setSize(30 * 30);
         s.setColumnView(0, c);
@@ -147,8 +164,8 @@ public class R303Service {
         s.addCell(new Label(1, 2, "" + headName, txtHeader3));
         s.mergeCells(1, 2, 8, 2);
         s.addCell(new Label(1, 3, "ประจำวันที่ "
-                + util.DateUtil.convertFormat(fdLocalFmt, "dd") + " " + util.DateUtil.getMonthTh(Integer.parseInt(util.DateUtil.convertFormat(fdLocalFmt, "MM")))
-                + " " + util.DateUtil.convertFormatYear(fdLocalFmt, "yyyy"), txtHeader3));
+                + util.DateUtil.convertFormat(date, "dd") + " " + util.DateUtil.getMonthTh(Integer.parseInt(util.DateUtil.convertFormat(date, "MM")))
+                + " " + util.DateUtil.convertFormatYear(date, "yyyy"), txtHeader3));
         s.mergeCells(1, 3, 8, 3);
     }
 
@@ -235,7 +252,7 @@ public class R303Service {
             s.addCell(new Label(8, 6, "รวม", txtCentreDetail));
 //            s.addCell(new Label(6, 5, "รวม", txtHeader5));
 //            s.mergeCells(6, 5, 6, 6);
-            System.out.println(sqlQueryData);
+//            System.out.println(sqlQueryData);
             ResultSet resultData = connector.executeQuery(sqlQueryData);
             int rowNum = 7;
             while (resultData.next()) {
