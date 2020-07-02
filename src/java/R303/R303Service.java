@@ -65,7 +65,7 @@ public class R303Service {
     public String generateReport(HttpServletRequest request) throws Exception {
         fInt = new NumberFormat("#,##0");
         cInteger = new WritableCellFormat(fInt);
-        fDou = new NumberFormat("#,##0.00");
+        fDou = new NumberFormat("#,##0.00_);(#,##0.00)");
         cDouble = new WritableCellFormat(fDou);
         font = new WritableFont(WritableFont.createFont("THSarabunPSK"), 14, WritableFont.NO_BOLD);
         fontBold = new WritableFont(WritableFont.createFont("THSarabunPSK"), 22, WritableFont.BOLD);
@@ -141,15 +141,15 @@ public class R303Service {
         s.setColumnView(8, c);
         s.setPageSetup(PageOrientation.LANDSCAPE);
         s.addCell(new Label(1, 0, util.DateUtil.getDateTimeExportReport(), txtRightDetail));
-        s.mergeCells(1, 0, 8, 0);
+        s.mergeCells(1, 0, 9, 0);
         s.addCell(new Label(1, 1, "การทางพิเศษแห่งประเทศไทย", txtHeader1));
-        s.mergeCells(1, 1, 8, 1);
+        s.mergeCells(1, 1, 9, 1);
         s.addCell(new Label(1, 2, "" + headName, txtHeader3));
-        s.mergeCells(1, 2, 8, 2);
+        s.mergeCells(1, 2, 9, 2);
         s.addCell(new Label(1, 3, "ประจำวันที่ "
                 + util.DateUtil.convertFormat(fdLocalFmt, "dd") + " " + util.DateUtil.getMonthTh(Integer.parseInt(util.DateUtil.convertFormat(fdLocalFmt, "MM")))
                 + " " + util.DateUtil.convertFormatYear(fdLocalFmt, "yyyy"), txtHeader3));
-        s.mergeCells(1, 3, 8, 3);
+        s.mergeCells(1, 3, 9, 3);
     }
 
     public void writeDataSummary(WritableSheet s, String date, String lineCode) throws Exception {
@@ -168,6 +168,7 @@ public class R303Service {
             String sqlQueryData = "SELECT STT.STATION_CODE, STT.STATION_DSC, STT.SAP_STT_CODE \n"
                     + ", SUM(NVL(TRX.BANK_RMT_AMOUNT_T1, 0)) AS BANK_RMT_AMOUNT_T1, SUM(NVL(TRX.BANK_RMT_AMOUNT_T2, 0)) AS BANK_RMT_AMOUNT_T2\n"
                     + ", SUM(NVL(TRX.DELIVER_RMT_AMOUNT_T1, 0)) AS DELIVER_RMT_AMOUNT_T1, SUM(NVL(TRX.DELIVER_RMT_AMOUNT_T2, 0)) AS DELIVER_RMT_AMOUNT_T2\n"
+                    + ", SUM(NVL(TRX.ADJ_AMOUNT, 0)) AS ADJ_AMOUNT\n"
                     + "FROM (\n"
                     + "	SELECT DISTINCT STT.STATION_CODE, STT.SAP_STT_CODE, STT.STATION_DSC\n"
                     + "	FROM RVA_MST_LINE LINE\n"
@@ -183,16 +184,15 @@ public class R303Service {
                     + "	ORDER BY STT.STATION_CODE\n"
                     + ") STT\n"
                     + "LEFT JOIN (\n"
-                    + "	SELECT BANK.STATION_CODE, BANK.RMT_AMOUNT AS BANK_RMT_AMOUNT_T1, 0 AS BANK_RMT_AMOUNT_T2, 0 AS DELIVER_RMT_AMOUNT_T1, 0 AS DELIVER_RMT_AMOUNT_T2\n"
+                    + "	SELECT BANK.STATION_CODE, BANK.RMT_AMOUNT AS BANK_RMT_AMOUNT_T1, 0 AS BANK_RMT_AMOUNT_T2, 0 AS DELIVER_RMT_AMOUNT_T1, 0 AS DELIVER_RMT_AMOUNT_T2, 0 AS ADJ_AMOUNT\n"
                     + "	FROM RVA_TRX_BANK_COUNT BANK\n"
-                    + "\n"
                     + "	WHERE TRX_DATE = TO_DATE('" + date + "', 'dd/MM/yyyy')\n"
                     + "	AND EMP_CODE = 'EMP0000130'\n"
                     + "	AND REV_TYPE = 'TOLL'\n"
                     + "	AND AUDIT_STATUS = 'Y'\n"
                     + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT\n"
                     + "	UNION ALL\n"
-                    + "	SELECT BANK.STATION_CODE, 0 AS BANK_RMT_AMOUNT_T1, BANK.RMT_AMOUNT AS BANK_RMT_AMOUNT_T2, 0 AS DELIVER_RMT_AMOUNT_T1, 0 AS DELIVER_RMT_AMOUNT_T2\n"
+                    + "	SELECT BANK.STATION_CODE, 0 AS BANK_RMT_AMOUNT_T1, BANK.RMT_AMOUNT AS BANK_RMT_AMOUNT_T2, 0 AS DELIVER_RMT_AMOUNT_T1, 0 AS DELIVER_RMT_AMOUNT_T2, 0 AS ADJ_AMOUNT\n"
                     + "	FROM RVA_TRX_BANK_COUNT BANK\n"
                     + "	WHERE TRX_DATE = TO_DATE('" + pastDate + "', 'dd/MM/yyyy')\n"
                     + "	AND EMP_CODE = 'EMP0000131'\n"
@@ -200,21 +200,21 @@ public class R303Service {
                     + "	AND AUDIT_STATUS = 'Y'\n"
                     + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT\n"
                     + "	UNION ALL\n"
-                    + "	SELECT BANK.STATION_CODE, 0 AS BANK_RMT_AMOUNT_T1, 0 AS BANK_RMT_AMOUNT_T2, BANK.RMT_AMOUNT AS DELIVER_RMT_AMOUNT_T1, 0 AS DELIVER_RMT_AMOUNT_T2\n"
+                    + "	SELECT BANK.STATION_CODE, 0 AS BANK_RMT_AMOUNT_T1, 0 AS BANK_RMT_AMOUNT_T2, BANK.RMT_AMOUNT AS DELIVER_RMT_AMOUNT_T1, 0 AS DELIVER_RMT_AMOUNT_T2, BANK.ADJ_AMOUNT AS ADJ_AMOUNT\n"
                     + "	FROM RVA_TRX_BANK_COUNT BANK\n"
                     + "	WHERE TRX_DATE = TO_DATE('" + date + "', 'dd/MM/yyyy')\n"
                     + "	AND EMP_CODE = 'EMP0000130'\n"
                     + "	AND REV_TYPE = 'TOLL'\n"
                     + "	AND AUDIT_STATUS = 'Y'\n"
-                    + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT\n"
+                    + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT, BANK.ADJ_AMOUNT\n"
                     + "	UNION ALL\n"
-                    + "	SELECT BANK.STATION_CODE, 0 AS BANK_RMT_AMOUNT_T1, 0 AS BANK_RMT_AMOUNT_T2, 0 AS DELIVER_RMT_AMOUNT_T1, BANK.RMT_AMOUNT AS DELIVER_RMT_AMOUNT_T2\n"
+                    + "	SELECT BANK.STATION_CODE, 0 AS BANK_RMT_AMOUNT_T1, 0 AS BANK_RMT_AMOUNT_T2, 0 AS DELIVER_RMT_AMOUNT_T1, BANK.RMT_AMOUNT AS DELIVER_RMT_AMOUNT_T2, BANK.ADJ_AMOUNT AS ADJ_AMOUNT\n"
                     + "	FROM RVA_TRX_BANK_COUNT BANK\n"
                     + "	WHERE TRX_DATE = TO_DATE('" + date + "', 'dd/MM/yyyy')\n"
                     + "	AND EMP_CODE = 'EMP0000131'\n"
                     + "	AND REV_TYPE = 'TOLL'\n"
                     + "	AND AUDIT_STATUS = 'Y'\n"
-                    + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT\n"
+                    + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT, BANK.ADJ_AMOUNT\n"
                     + ") TRX ON STT.STATION_CODE = TRX.STATION_CODE\n"
                     + "GROUP BY STT.STATION_CODE, STT.SAP_STT_CODE, STT.STATION_DSC\n"
                     + "ORDER BY STT.SAP_STT_CODE";
@@ -229,13 +229,13 @@ public class R303Service {
             s.addCell(new Label(5, 6, "รวม", txtCentreDetail));
 
             s.addCell(new Label(6, 5, "รายได้ค่าผ่านทาง EMV. (กทพ.)", txtHeader5));
-            s.mergeCells(6, 5, 8, 5);
+            s.mergeCells(6, 5, 9, 5);
             s.addCell(new Label(6, 6, "00:00-21:00 น.", txtCentreDetail));
             s.addCell(new Label(7, 6, "21:01-23:59 น.", txtCentreDetail));
             s.addCell(new Label(8, 6, "รวม", txtCentreDetail));
+            s.addCell(new Label(9, 6, "ปรับปรุง", txtCentreDetail));
 //            s.addCell(new Label(6, 5, "รวม", txtHeader5));
 //            s.mergeCells(6, 5, 6, 6);
-            System.out.println(sqlQueryData);
             ResultSet resultData = connector.executeQuery(sqlQueryData);
             int rowNum = 7;
             while (resultData.next()) {
@@ -247,6 +247,7 @@ public class R303Service {
                 s.addCell(new jxl.write.Number(6, rowNum, resultData.getInt("DELIVER_RMT_AMOUNT_T1"), tDouble));
                 s.addCell(new jxl.write.Number(7, rowNum, resultData.getInt("DELIVER_RMT_AMOUNT_T2"), tDouble));
                 s.addCell(new jxl.write.Formula(8, rowNum, "SUM(G" + (rowNum + 1) + ", H" + (rowNum + 1) + ")", tDouble));
+                s.addCell(new jxl.write.Number(9, rowNum, resultData.getInt("ADJ_AMOUNT"), tDouble));
 //                s.addCell(new jxl.write.Formula(6, rowNum, "SUM(F" + (rowNum + 1) + ")", tDouble));
                 rowNum++;
             }
@@ -258,6 +259,7 @@ public class R303Service {
             s.addCell(new jxl.write.Formula(6, rowNum, "SUM(G8: G" + rowNum + ")", tDouble));
             s.addCell(new jxl.write.Formula(7, rowNum, "SUM(H8: H" + rowNum + ")", tDouble));
             s.addCell(new jxl.write.Formula(8, rowNum, "SUM(I8: I" + rowNum + ")", tDouble));
+            s.addCell(new jxl.write.Formula(9, rowNum, "SUM(J8: J" + rowNum + ")", tDouble));
 //            s.addCell(new jxl.write.Formula(6, rowNum, "SUM(G8: G" + rowNum + ")", tDouble));
         } finally {
             connector.close();
