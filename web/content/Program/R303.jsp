@@ -19,16 +19,21 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#d1").datepicker();
+            $("#toDate").datepicker();
             $("#bt").click(function () {
                 if ($("#d1").val() == "") {
                     alert("กรุณาระบุวันที่");
                     $("#d1").focus();
                 } else {
+                    var toDate = $("#toDate").val();
+                    if (toDate === "") {
+                        toDate = $("#d1").val();
+                    }
                     $('#rss').html("Loading...");
                     $("#bt").attr('disabled', 'disabled');
-
                     $.post("/Helper/R303Controller", {
                         date: $("#d1").val(),
+                        toDate: toDate,
                         lineCode: $("#lineCode").val()
                     }, function (data) {
                         $("#bt").removeAttr('disabled');
@@ -44,11 +49,13 @@
     <input  type="button" value="กลับหน้าแรก" onclick="history.back()"  >
     <input id="bt"  type="button" value=" ออกรายงาน ">
     <span id="rss"></span>
-    <table width="50%"  class="form" cellpadding="5" cellspacing="0">
+    <table width="100%"  class="form" cellpadding="5" cellspacing="0">
         <tr>
             <td  align="right" width="30%">วันที่ : </td>
             <td>
                 <input id="d1" type="text" autocomplete="off"/>
+                ถึง
+                <input id="toDate" type="text" autocomplete="off"/>
             </td>
         </tr>
         <tr>

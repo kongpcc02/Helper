@@ -17,7 +17,7 @@ import java.util.Locale;
 public class DateUtil {
 
     public static String convertFormat(String d, String formatt) throws ParseException {
-        SimpleDateFormat sdfSource = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdfSource = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         Date date = sdfSource.parse(d);
         SimpleDateFormat sdfDestination = new SimpleDateFormat(formatt);
 
