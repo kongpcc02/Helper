@@ -43,6 +43,7 @@
                             <input   disabled="disabled" type="button" value="P108 ส่งออกข้อมูล DOC ของทางด่วนศรีรัช ส่วน D" onclick=window.location="<%=request.getContextPath() + "/content/Program/P108.jsp"%>">
                             <input disabled="disabled"   type="button" value="P108 ส่งออกข้อมูลปริมาณจราจรและรายได้" onclick=window.location="<%=request.getContextPath() + "/content/Program/P108.jsp"%>">
                             <input  type="button" disabled="disabled" value="P201 ลบ Interface" onclick=window.location="<%=request.getContextPath() + "/content/Program/P201.jsp"%>">
+                            <input  type="button" value="P301 แก้ไข VAT การให้บริการ Easy Pass" onclick=window.location="<%=request.getContextPath() + "/content/Program/P301.jsp"%>">
                         </fieldset>
                     </td>
                     <td width="30%" valign="top">

@@ -188,6 +188,10 @@
         <servlet-name>R303Controller</servlet-name>
         <servlet-class>R303.R303Controller</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>P301Controller</servlet-name>
+        <servlet-class>P301.P301Controller</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -375,6 +379,10 @@
     <servlet-mapping>
         <servlet-name>R303Controller</servlet-name>
         <url-pattern>/R303Controller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>P301Controller</servlet-name>
+        <url-pattern>/P301Controller</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

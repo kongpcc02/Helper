@@ -75,13 +75,13 @@
             <tr style="font-size: 85%">
                 <td align="left"><b>Username :</b></td>
                 <td>
-                    <input type="text" name="user" id="user">
+                    <input type="text" name="user" id="user" autocomplete="off">
                 </td>
             </tr>
             <tr style="font-size: 85%">
                 <td align="left">
                     <b>Password :  </b></td>
-                <td><input type="password" name="pass" id="pass" >
+                <td><input type="password" name="pass" id="pass" autocomplete="off">
                 </td>
             </tr>
             <tr >

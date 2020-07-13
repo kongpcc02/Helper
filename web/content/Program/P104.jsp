@@ -61,7 +61,7 @@
         <input  type="button" value="กลับหน้าแรก" onclick="history.back()"  >
         <table width="50%"  class="form" cellpadding="5" cellspacing="0" >
             <tr>
-                <td >วันที่ : <input class="r" id="d" type="text" onclick="this.value = ''"/>
+                <td >วันที่ : <input class="r" id="d" type="text" onclick="this.value = ''" autocomplete="off"/>
                     <input onclick="process();" type="button" value=" นำเข้าข้อมูล ">
 
                 </td>
