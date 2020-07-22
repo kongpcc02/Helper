@@ -172,6 +172,7 @@ public class R303Service {
     public void writeDataSummary(WritableSheet s, String date, String lineCode) throws Exception {
         // date format dd/MM/yyyy
         Connector connector = new Connector();
+        Connector connectorHelper = new Connector();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Date presentDate = sdf.parse(date);
@@ -180,6 +181,17 @@ public class R303Service {
             calendar.add(Calendar.DATE, -1);
             String pastDate = sdf.format(calendar.getTime());
             connector.connectEta();
+            connectorHelper.connect();
+            String empCodeT1, empCodeT2;
+            String sqlQueryEmpCode = "SELECT *\n"
+                    + "FROM RVA_MST_EMP_EMV\n"
+                    + "WHERE LINE_CODE = '" + lineCode + "'";
+            ResultSet resultEmp = connectorHelper.executeQuery(sqlQueryEmpCode);
+            if (!resultEmp.next()) {
+                throw new Exception("ไม่พบข้อมูลพนักงานจัดเก็บค่าผ่านทาง EMV");
+            }
+            empCodeT1 = resultEmp.getString("EMP_CODE_T1");
+            empCodeT2 = resultEmp.getString("EMP_CODE_T2");
             String sqlLineType = this.lineType.equals("O") ? "RVA_MST_CHRG_OPN CHRG ON CHRG.STATION_CODE " : " RVA_MST_CHRG_CLS CHRG ON CHRG.EXT_STT_CODE ";
             String sqlIgnoreSectorD = "02".equals(lineCode) ? "AND SCT.SECTOR_CODE <> 26 \n" : "";
             String sqlQueryData = "SELECT STT.STATION_CODE, STT.STATION_DSC, STT.SAP_STT_CODE \n"
@@ -204,7 +216,7 @@ public class R303Service {
                     + "	SELECT BANK.STATION_CODE, BANK.RMT_AMOUNT AS BANK_RMT_AMOUNT_T1, 0 AS BANK_RMT_AMOUNT_T2, 0 AS DELIVER_RMT_AMOUNT_T1, 0 AS DELIVER_RMT_AMOUNT_T2, 0 AS ADJ_AMOUNT\n"
                     + "	FROM RVA_TRX_BANK_COUNT BANK\n"
                     + "	WHERE TRX_DATE = TO_DATE('" + date + "', 'dd/MM/yyyy')\n"
-                    + "	AND EMP_CODE = 'EMP0000130'\n"
+                    + "	AND EMP_CODE = '" + empCodeT1 +"'\n"
                     + "	AND REV_TYPE = 'TOLL'\n"
                     + "	AND AUDIT_STATUS = 'Y'\n"
                     + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT\n"
@@ -212,7 +224,7 @@ public class R303Service {
                     + "	SELECT BANK.STATION_CODE, 0 AS BANK_RMT_AMOUNT_T1, BANK.RMT_AMOUNT AS BANK_RMT_AMOUNT_T2, 0 AS DELIVER_RMT_AMOUNT_T1, 0 AS DELIVER_RMT_AMOUNT_T2, 0 AS ADJ_AMOUNT\n"
                     + "	FROM RVA_TRX_BANK_COUNT BANK\n"
                     + "	WHERE TRX_DATE = TO_DATE('" + pastDate + "', 'dd/MM/yyyy')\n"
-                    + "	AND EMP_CODE = 'EMP0000131'\n"
+                    + "	AND EMP_CODE = '" + empCodeT2 +"'\n"
                     + "	AND REV_TYPE = 'TOLL'\n"
                     + "	AND AUDIT_STATUS = 'Y'\n"
                     + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT\n"
@@ -220,7 +232,7 @@ public class R303Service {
                     + "	SELECT BANK.STATION_CODE, 0 AS BANK_RMT_AMOUNT_T1, 0 AS BANK_RMT_AMOUNT_T2, BANK.RMT_AMOUNT AS DELIVER_RMT_AMOUNT_T1, 0 AS DELIVER_RMT_AMOUNT_T2, BANK.ADJ_AMOUNT AS ADJ_AMOUNT\n"
                     + "	FROM RVA_TRX_BANK_COUNT BANK\n"
                     + "	WHERE TRX_DATE = TO_DATE('" + date + "', 'dd/MM/yyyy')\n"
-                    + "	AND EMP_CODE = 'EMP0000130'\n"
+                    + "	AND EMP_CODE = '" + empCodeT1 +"'\n"
                     + "	AND REV_TYPE = 'TOLL'\n"
                     + "	AND AUDIT_STATUS = 'Y'\n"
                     + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT, BANK.ADJ_AMOUNT\n"
@@ -228,7 +240,7 @@ public class R303Service {
                     + "	SELECT BANK.STATION_CODE, 0 AS BANK_RMT_AMOUNT_T1, 0 AS BANK_RMT_AMOUNT_T2, 0 AS DELIVER_RMT_AMOUNT_T1, BANK.RMT_AMOUNT AS DELIVER_RMT_AMOUNT_T2, BANK.ADJ_AMOUNT AS ADJ_AMOUNT\n"
                     + "	FROM RVA_TRX_BANK_COUNT BANK\n"
                     + "	WHERE TRX_DATE = TO_DATE('" + date + "', 'dd/MM/yyyy')\n"
-                    + "	AND EMP_CODE = 'EMP0000131'\n"
+                    + "	AND EMP_CODE = '" + empCodeT2 +"'\n"
                     + "	AND REV_TYPE = 'TOLL'\n"
                     + "	AND AUDIT_STATUS = 'Y'\n"
                     + "	GROUP BY BANK.STATION_CODE, BANK.RMT_AMOUNT, BANK.ADJ_AMOUNT\n"
@@ -281,6 +293,7 @@ public class R303Service {
 //            s.addCell(new jxl.write.Formula(6, rowNum, "SUM(G8: G" + rowNum + ")", tDouble));
         } finally {
             connector.close();
+            connectorHelper.close();
         }
     }
 
