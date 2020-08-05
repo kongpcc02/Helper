@@ -75,7 +75,6 @@ public class P301Service {
     
     protected void executeUpdateVat(String lineCode, String dateFrom, String dateTo, String serviceId, double minMoney, String userId) throws Exception {
         Connector connector = new Connector();
-        StringBuilder strBuilder = new StringBuilder();
         EtcTrxModel etcTrxModel = null;
         ArrayList<EtcTrxModel> etcTrxList = new ArrayList<EtcTrxModel>();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
@@ -108,6 +107,8 @@ public class P301Service {
             double cost, vatOfCost, excludeVatOfCost;
             int costDivideMin;
             for (EtcTrxModel etcTrx : etcTrxList) {
+                connector.close();
+                connector.connectEta();
                 cost = etcTrx.getCost();
                 if (cost == minMoney) {
                     continue;
