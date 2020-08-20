@@ -43,7 +43,8 @@
                             <input   disabled="disabled" type="button" value="P108 ส่งออกข้อมูล DOC ของทางด่วนศรีรัช ส่วน D" onclick=window.location="<%=request.getContextPath() + "/content/Program/P108.jsp"%>">
                             <input disabled="disabled"   type="button" value="P108 ส่งออกข้อมูลปริมาณจราจรและรายได้" onclick=window.location="<%=request.getContextPath() + "/content/Program/P108.jsp"%>">
                             <input  type="button" disabled="disabled" value="P201 ลบ Interface" onclick=window.location="<%=request.getContextPath() + "/content/Program/P201.jsp"%>">
-                            <input  type="button" value="P301 แก้ไข VAT การให้บริการ Easy Pass" onclick=window.location="<%=request.getContextPath() + "/content/Program/P301.jsp"%>">
+                            <input  type="button" disabled="disabled" value="P301 แก้ไข VAT การให้บริการ Easy Pass" onclick=window.location="<%=request.getContextPath() + "/content/Program/P301.jsp"%>">
+  
                         </fieldset>
                     </td>
                     <td width="30%" valign="top">
@@ -55,7 +56,8 @@
                             <input type="button" value="R303 รายงานสรุปค่าผ่านทางประเภท EMV" onclick=window.location="<%=request.getContextPath() + "/content/Program/R303.jsp"%>">
                             <!--<input type="button" value="R302A รายงานสรุปค่าผ่านทางประเภท EMV" onclick=window.location="<%=request.getContextPath() + "/content/Program/R302A.jsp"%>">-->
                             <input type="button" value="RR204EXATB รายงานปริมาณจราจรและรายได้ค่าผ่านทางแยกตามด่าน แสดงเฉพาะรายได้ กทพ." onclick=window.location="<%=request.getContextPath() + "/content/Program/R204.jsp"%>">
-                            
+                            <input  type="button" value="R304 รายงานการให้บริการ Easy Pass (เฉพาะประเภทการชำระจากเครื่อง EDC)" onclick=window.location="<%=request.getContextPath() + "/content/Program/R304.jsp"%>">
+
                         </fieldset>
                     </td>
                 </tr>

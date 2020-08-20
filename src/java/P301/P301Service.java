@@ -24,6 +24,7 @@ public class P301Service {
             String sqlQuery = "SELECT SERVICE_ID, SERVICE_CODE, SERVICE_DESC\n"
                     + "FROM RVA_MST_ETC_SERVICE_TYPE\n"
                     + "WHERE ACTIVE_STATUS = 'A'\n"
+                    + "AND SERVICE_ID NOT IN ('2', '5')"
                     + "ORDER BY SERVICE_CODE";
             ResultSet queryResult = connector.executeQuery(sqlQuery);
             while (queryResult.next()) {
@@ -82,17 +83,17 @@ public class P301Service {
         try {
             connector.connectEta();
             String sqlQuery = "SELECT SHIFT_ID, POS.POS_CODE, POS.POS_DESC, TRX.LINE_CODE\n"
-                    + ", SUM(TRX.COST) AS COST\n"
-                    + ", SUM(TRX.INVAT) AS INVAT\n"
-                    + ", SUM(TRX.VAT) AS VAT\n"
-                    + ", SUM(TRX.EXVAT) AS EXVAT\n"
+                    + ", TRX.COST AS COST\n"
+                    + ", TRX.INVAT AS INVAT\n"
+                    + ", TRX.VAT AS VAT\n"
+                    + ", TRX.EXVAT AS EXVAT\n"
                     + "FROM RVA_MST_ETC_POS POS \n"
                     + "INNER JOIN RVA_TRX_ETC_MASTER MST ON POS.POS_ID = MST.POS_ID\n"
                     + "INNER JOIN RVA_TRX_ETC_TRX TRX ON TRX.SHIFT_ID = MST.SHIFT_ID\n"
                     + "WHERE TRX_DATE BETWEEN TO_DATE('" + dateFrom + "', 'dd/MM/yyyy') AND TO_DATE('" + dateTo + "', 'dd/MM/yyyy')\n"
                     + "AND POS.LINE_CODE = '" + lineCode + "'\n"
                     + "AND TRX.SERVICE_ID = '" + serviceId + "'\n"
-                    + "GROUP BY SHIFT_ID, POS.POS_CODE, POS.POS_DESC, TRX.LINE_CODE\n"
+//                    + "GROUP BY SHIFT_ID, POS.POS_CODE, POS.POS_DESC, TRX.LINE_CODE\n"
                     + "ORDER BY POS_CODE";
             ResultSet queryResult = connector.executeQuery(sqlQuery);
             while (queryResult.next()) {
@@ -120,7 +121,8 @@ public class P301Service {
                         + "SET EXVAT = '" + excludeVatOfCost + "', VAT = '" + vatOfCost + "', UPDATED_BY = '" + userId + "', UPDATED_DATE = SYSDATE\n"
                         + "WHERE SHIFT_ID = '" + etcTrx.getShiftId() + "'\n"
                         + "AND SERVICE_ID = '" + serviceId + "'\n "
-                        + "AND LINE_CODE = '" + etcTrx.getLineCode() + "'";
+                        + "AND LINE_CODE = '" + etcTrx.getLineCode() + "'"
+                        + "AND COST = '" + cost + "'";
                 connector.executeUpdate(sqlUpdate);
             }
         } catch (Exception ex) {
