@@ -504,7 +504,7 @@ public class P115Service extends Helper {
             sql += " FROM DMS_TRAFFIC2 T1 \n";
             sql += " WHERE ( T1.TR_STATN BETWEEN 200 AND 299) --AND T1.TR_STATN NOT IN (241, 242, 243, 244, 245)";
             sql += " \n AND TR_YMD = TO_DATE (\'" + shiftDate + "\',\'yyyyMMdd\')";
-            sql += " AND T1.TR_CODE_G NOT LIKE \'2%\'";
+//            sql += " AND T1.TR_CODE_G NOT LIKE \'2%\'";
             sql += " ORDER BY T1.TR_STATN, TR_CODE_G, TR_SHIFT";
             ResultSet result = connector.executeQuery(sql);
             while (result.next()) {
@@ -553,7 +553,7 @@ public class P115Service extends Helper {
             sql += " FROM DMS_REVENUE2 T1 \n";
             sql += " WHERE ( T1.REV_STATN BETWEEN 200 AND 299) --AND T1.REV_STATN NOT IN (241, 242, 243, 244, 245)";
             sql += " \n AND REV_YMD = TO_DATE (\'" + shiftDate + "\',\'yyyyMMdd\')";
-            sql += " AND T1.REV_CODE_G NOT LIKE \'2%\'";
+//            sql += " AND T1.REV_CODE_G NOT LIKE \'2%\'";
             sql += " ORDER BY T1.REV_STATN, REV_CODE_G, REV_SHIFT";
             ResultSet result = connector.executeQuery(sql);
             while (result.next()) {

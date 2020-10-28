@@ -193,7 +193,7 @@ public class R304Service {
                     + "INNER JOIN RVA_TRX_ETC_MASTER MST ON POS.POS_ID = MST.POS_ID\n"
                     + "INNER JOIN RVA_TRX_ETC_TRX TRX ON TRX.SHIFT_ID = MST.SHIFT_ID\n"
                     + "WHERE TRX_DATE BETWEEN TO_DATE('" + fromDate + "', 'dd/MM/yyyy') AND TO_DATE('" + toDate + "', 'dd/MM/yyyy')\n"
-                    + "AND MST.AUDIT_STATUS = 'Y'\n"
+//                    + "AND MST.AUDIT_STATUS = 'Y'\n"
                     + "AND POS.LINE_CODE = '" + lineCode + "'\n"
                     + sqlServiceId
                     + "AND TRX.PT_ID IN ('11', '13', '14')\n"
